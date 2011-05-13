@@ -1,0 +1,14 @@
+hr {
+	display: block;
+	position: relative;
+	padding: 0;
+	margin: 8px auto;
+	width: 100%;
+	clear: both;
+	border: none;
+	border-top: 1px solid #CCCCCC;
+	border-bottom: 1px solid #FFFFFF;
+	font-size: 1px;
+	line-height: 0;
+	overflow: visible;
+}

@@ -1,0 +1,35 @@
+=== WordPress Perfect Plugin ===
+Contributors: butterflymedia
+Donate link: http://www.blogtycoon.net/
+Tags: utilities, developer, perfection
+Requires at least: 3.1
+Tested up to: 3.1.2
+Stable tag: 0.1.2
+
+== Description ==
+
+For clients only! Do not install this plugin! Do not ask for support!
+
+== Installation ==
+
+Upload and activate the plugin.
+
+== Changelog ==
+
+= 0.1.3 =
+* Added page speed tracking for Google Analytics
+
+= 0.1.2 =
+* Rewritten basic webmaster settings
+
+= 0.1.1 =
+* Added submenus
+* Added an options page (currently with email address only)
+
+= 0.1.0 =
+* First release (buggy, crippled and alpha quality)
+
+== Frequently Asked Questions ==
+n/a
+
+== Screenshots ==
