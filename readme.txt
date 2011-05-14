@@ -4,7 +4,7 @@ Donate link: http://www.blogtycoon.net/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
 Tested up to: 3.1.2
-Stable tag: 0.1.2
+Stable tag: 0.1.2.1
 
 == Description ==
 
@@ -16,8 +16,9 @@ Upload and activate the plugin.
 
 == Changelog ==
 
-= 0.1.3 =
+= 0.1.2.1 =
 * Added page speed tracking for Google Analytics
+* Added custom login panel
 
 = 0.1.2 =
 * Rewritten basic webmaster settings
