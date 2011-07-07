@@ -1,30 +1,12 @@
 <?php
-/*
-Plugin Name: FeedBurner FeedSmith
-Plugin URI: http://www.feedburner.com/fb/a/help/wordpress_quickstart
-Description: Originally authored by <a href="http://www.orderedlist.com/">Steve Smith</a>, this plugin detects all ways to access your original WordPress feeds and redirects them to your FeedBurner feed so you can track every possible subscriber. 
-Author: FeedBurner
-Author URI: http://www.feedburner.com
-Version: 2.3.1
-*/
-
 $data = array(
-	'feedburner_url'		=> '',
-	'feedburner_comments_url'	=> ''
+	'feedburner_url' => '',
+	'feedburner_comments_url' => ''
 );
 
 $ol_flash = '';
 
-function ol_is_authorized() {
-	global $user_level;
-	if (function_exists("current_user_can")) {
-		return current_user_can('activate_plugins');
-	} else {
-		return $user_level > 5;
-	}
-}
-								
-add_option('feedburner_settings',$data,'FeedBurner Feed Replacement Options');
+add_option('feedburner_settings', $data, '', 'yes');
 
 $feedburner_settings = get_option('feedburner_settings');
 
@@ -50,60 +32,49 @@ function fb_retrieve_hash() {
 	return $ret;
 }
 
-//function ol_add_feedburner_options_page() {
-//	if (function_exists('add_options_page')) {
-//		add_options_page('FeedBurner', 'FeedBurner', 8, basename(__FILE__), 'ol_feedburner_options_subpanel');
-//	}
-//}
-
 function ol_feedburner_options_subpanel() {
 	global $ol_flash, $feedburner_settings, $_POST, $wp_rewrite;
-	if (ol_is_authorized()) {
-		// Easiest test to see if we have been submitted to
-		if(isset($_POST['feedburner_url']) || isset($_POST['feedburner_comments_url'])) {
-			// Now we check the hash, to make sure we are not getting CSRF
-			if(fb_is_hash_valid($_POST['token'])) {
-				if (isset($_POST['feedburner_url'])) { 
-					$feedburner_settings['feedburner_url'] = $_POST['feedburner_url'];
-					update_option('feedburner_settings',$feedburner_settings);
-					$ol_flash = "Your settings have been saved.";
-				}
-				if (isset($_POST['feedburner_comments_url'])) { 
-					$feedburner_settings['feedburner_comments_url'] = $_POST['feedburner_comments_url'];
-					update_option('feedburner_settings',$feedburner_settings);
-					$ol_flash = "Your settings have been saved.";
-				} 
-			} else {
-				// Invalid form hash, possible CSRF attempt
-				$ol_flash = "Security hash missing.";
-			} // endif fb_is_hash_valid
-		} // endif isset(feedburner_url)
-	} else {
-		$ol_flash = "You don't have enough access rights.";
-	}
+
+	// Easiest test to see if we have been submitted to
+	if(isset($_POST['feedburner_url']) || isset($_POST['feedburner_comments_url'])) {
+		// Now we check the hash, to make sure we are not getting CSRF
+		if(fb_is_hash_valid($_POST['token'])) {
+			if (isset($_POST['feedburner_url'])) { 
+				$feedburner_settings['feedburner_url'] = $_POST['feedburner_url'];
+				update_option('feedburner_settings',$feedburner_settings);
+				$ol_flash = "Your settings have been saved.";
+			}
+			if (isset($_POST['feedburner_comments_url'])) { 
+				$feedburner_settings['feedburner_comments_url'] = $_POST['feedburner_comments_url'];
+				update_option('feedburner_settings',$feedburner_settings);
+				$ol_flash = "Your settings have been saved.";
+			} 
+		} else {
+			// Invalid form hash, possible CSRF attempt
+			$ol_flash = "Security hash missing.";
+		} // endif fb_is_hash_valid
+	} // endif isset(feedburner_url)
 	
 	if ($ol_flash != '') echo '<div id="message" class="updated fade"><p>' . $ol_flash . '</p></div>';
 	
-	if (ol_is_authorized()) {
-		$temp_hash = fb_generate_hash();
-		fb_store_hash($temp_hash);
-		echo '<div class="wrap">';
-		echo '<h2>Set Up Your FeedBurner Feed</h2>';
-		echo '<p>This plugin makes it easy to redirect 100% of traffic for your feeds to a FeedBurner feed you have created. FeedBurner can then track all of your feed subscriber traffic and usage and apply a variety of features you choose to improve and enhance your original WordPress feed.</p>
+	$temp_hash = fb_generate_hash();
+	fb_store_hash($temp_hash);
+	echo '<div class="wrap">';
+	echo '<div id="icon-options-general" class="icon32"></div>';
+	echo '<h2>Google FeedBurner Settings</h2>';
+	echo '
+		<p>This module redirects traffic for your feeds to a Google FeedBurner feed you have created. Google FeedBurner can then track all of your feed subscriber traffic and usage and apply a variety of features you choose to improve and enhance your original WordPress feed. Google FeedBurner\'s services allow publishers who already have a feed to improve their understanding of and relationship with their audience. Once you have a working feed, run it through FeedBurner and realize a whole new set of benefits.</p>
 		<form action="" method="post">
-		<input type="hidden" name="redirect" value="true" />
-		<input type="hidden" name="token" value="' . fb_retrieve_hash() . '" />
-		<ol>
-		<li>To get started, <a href="https://www.feedburner.com/fb/a/addfeed?sourceUrl=' . get_bloginfo('url') . '" target="_blank">create a FeedBurner feed for ' . get_bloginfo('name') . '</a>. This feed will handle all traffic for your posts.</li>
-		<li>Once you have created your FeedBurner feed, enter its address into the field below (http://feeds.feedburner.com/yourfeed):<br/><input type="text" name="feedburner_url" value="' . htmlentities($feedburner_settings['feedburner_url']) . '" size="45" /></li>
-		<li>Optional: If you also want to handle your WordPress comments feed using FeedBurner, <a href="https://www.feedburner.com/fb/a/addfeed?sourceUrl=' . get_bloginfo('url') . '/wp-commentsrss2.php" target="_blank">create a FeedBurner comments feed</a> and then enter its address below:<br/><input type="text" name="feedburner_comments_url" value="' . htmlentities($feedburner_settings['feedburner_comments_url']) . '" size="45" />
-		</ol>
-		<p><input type="submit" value="Save" /></p></form>';
-		echo '</div>';
-	} else {
-		echo '<div class="wrap"><p>Sorry, you are not allowed to access this page.</p></div>';
-	}
-
+			<input type="hidden" name="redirect" value="true" />
+			<input type="hidden" name="token" value="'.fb_retrieve_hash().'" />
+			<ol>
+				<li>To get started, <a href="http://feedburner.google.com/fb/a/home" target="_blank">create a FeedBurner feed for '.get_bloginfo('name').'</a>. This feed will handle all traffic for your posts.</li>
+				<li>Once you have created your FeedBurner feed, enter its address into the field below (<code>http://feeds.feedburner.com/yourfeedhere</code>):<br /><input type="text" name="feedburner_url" value="'.htmlentities($feedburner_settings['feedburner_url']).'" size="45" /></li>
+				<li>Optional: If you also want to handle your WordPress comments feed using FeedBurner, <a href="http://feedburner.google.com/fb/a/home" target="_blank">create a FeedBurner comments feed</a> and then enter its address below:<br /><input type="text" name="feedburner_comments_url" value="'.htmlentities($feedburner_settings['feedburner_comments_url']).'" size="45" />
+			</ol>
+			<p><input type="submit" value="Save" class="button-primary" /></p>
+		</form>';
+	echo '</div>';
 }
 
 function ol_feed_redirect() {
@@ -150,7 +121,4 @@ if (!preg_match("/feedburner|feedvalidator/i", $_SERVER['HTTP_USER_AGENT'])) {
 	add_action('template_redirect', 'ol_feed_redirect');
 	add_action('init','ol_check_url');
 }
-
-//add_action('admin_menu', 'ol_add_feedburner_options_page');
-
 ?>

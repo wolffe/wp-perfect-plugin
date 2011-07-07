@@ -16,6 +16,10 @@ Upload and activate the plugin.
 
 == Changelog ==
 
+= 0.1.2.2 =
+* Added more custom branding
+* Fixed a Google Feedburner warning
+
 = 0.1.2.1 =
 * Added page speed tracking for Google Analytics
 * Added custom login panel
