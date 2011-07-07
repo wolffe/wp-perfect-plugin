@@ -5,7 +5,7 @@ Plugin URI: http://www.blogtycoon.net/wordpress-plugins/wordpress-perfect-plugin
 Description: Perfection has no description.
 Author: Ciprian Popescu
 Author URI: http://www.blogtycoon.net/
-Version: 0.1.2.2
+Version: 0.1.2.3
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011 Ciprian Popescu
@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-error_reporting(E_ALL); // Used for debug
+error_reporting(0); // Used for debug
 // w3p is wppp - wordpress perfect plugin - 3 p's // get it? // :|
 
 //
@@ -39,7 +39,7 @@ if(!defined('WP_PLUGIN_DIR'))
 
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/wp-perfect-plugin');
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/wp-perfect-plugin');
-define('W3P_VERSION', '0.1.2.2');
+define('W3P_VERSION', '0.1.2.3');
 //
 
 // Begin Code

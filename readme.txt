@@ -4,7 +4,7 @@ Donate link: http://www.blogtycoon.net/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
 Tested up to: 3.1.2
-Stable tag: 0.1.2.2
+Stable tag: 0.1.2.3
 
 == Description ==
 
