@@ -3,8 +3,8 @@ Contributors: butterflymedia
 Donate link: http://www.blogtycoon.net/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
-Tested up to: 3.1.2
-Stable tag: 0.1.2.3
+Tested up to: 3.2
+Stable tag: 0.1.2.4
 
 == Description ==
 
@@ -15,6 +15,11 @@ For clients only! Do not install this plugin! Do not ask for support!
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.2.4 =
+* Added gallery fix
+* Fixed Google Streetview icon
+* Removed RSS dashboard widget
 
 = 0.1.2.2 =
 * Added more custom branding

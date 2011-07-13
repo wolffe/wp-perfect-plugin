@@ -123,7 +123,7 @@ function addMediaButton() {
 	
 	$simple_streetview_title = 'Add Google Street View';
 	
-	$logo = get_option('siteurl') . "/wp-content/plugins/" . dirname(plugin_basename(__FILE__)) . "/simple_streetview_media_icon.png";
+	$logo = get_option('siteurl') . "/wp-content/plugins/" . dirname(plugin_basename(__FILE__)) . "/icon-streetview.png";
 	
 	$link_markup = "<a href='{$simple_streetview_upload_iframe_src}&amp;tab=simple_streetview&amp;TB_iframe=true&amp;height=400&amp;width=640' class='thickbox' title='$simple_streetview_title'><img src='$logo' alt='$logo' /></a>\n";
 

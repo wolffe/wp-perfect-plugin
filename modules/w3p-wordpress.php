@@ -26,36 +26,9 @@ add_filter('login_headertitle', 'w3p_login_title');
 
 // Perfect Dashboard Branding
 function w3p_admin_footer_text( $default_text ) {
-	return '<span id="footer-thankyou">Website managed by <a href="http://www.blogtycoon.net/">Blog Tycoon</a><span> | Powered by <a href="http://wordpress.org/">WordPress</a>';
+	return '<span id="footer-thankyou">Website managed by <a href="http://getbutterfly.com/">getButterfly</a><span> | Powered by <a href="http://wordpress.org/">WordPress</a>';
 }
 
-// Perfect Custom RSS Feed
-function w3p_dashboard_widgets() {
-	global $wp_meta_boxes;
-	// remove unnecessary widgets
-	// var_dump( $wp_meta_boxes['dashboard'] ); // use to get all the widget IDs
-	unset(
-		$wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins'],
-		$wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary'],
-		$wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']
-	);
-	// add a custom dashboard widget
-	wp_add_dashboard_widget('dashboard_custom_feed', 'News from Blog Tycoon', 'dashboard_custom_feed_output'); //add new RSS feed output
-}
-function dashboard_custom_feed_output() {
-	echo '<div class="rss-widget">';
-	wp_widget_rss_output(array(
-		'url' => 'http://www.blogtycoon.net/feed',
-		'title' => 'News from Blog Tycoon',
-		'items' => 2,
-		'show_summary' => 1,
-		'show_author' => 0,
-		'show_date' => 1 
-	));
-	echo '</div>';
-}
-
-add_action('wp_dashboard_setup', 'w3p_dashboard_widgets');
 add_filter('admin_footer_text', 'w3p_admin_footer_text');
 
 // Remove unnecessary links from the menu
