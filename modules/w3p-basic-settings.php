@@ -112,11 +112,11 @@ function all_in_one_webmaster_options_page() {
 				<br /><small class="description">(meta name="google-site-verification" content="<code>Volxdfasfasd3i3e_wATasfdsSDb0uFqvNVhLk7ZVY</code>")</small>
 			</p>
 			<p>
-				<input name="all_in_one_yahoo_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_yahoo_webmaster'); ?>" /> <label>Bing Webmaster Center</label>
+				<input name="all_in_one_bing_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_bing_webmaster'); ?>" /> <label>Bing Webmaster Center</label>
 				<br /><small class="description">(meta name="msvalidate.01" content="<code>ASBKDW71D43Z67AB2D39636C89B88A</code>")</small>
 			</p>
 			<p>
-				<input name="all_in_one_bing_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_bing_webmaster'); ?>" /> <label>Yahoo Site Explorer</label>
+				<input name="all_in_one_yahoo_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_yahoo_webmaster'); ?>" /> <label>Yahoo Site Explorer</label>
 				<br /><small class="description">(meta name="y_key" content="<code>98D5S31a48dd7fc</code>")</small>
 			</p>
 			<p>

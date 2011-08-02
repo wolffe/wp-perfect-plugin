@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfection has no description.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.2.4
+Version: 0.1.2.5
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011 Ciprian Popescu

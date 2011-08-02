@@ -1,10 +1,10 @@
 === WordPress Perfect Plugin ===
 Contributors: butterflymedia
-Donate link: http://www.blogtycoon.net/
+Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
-Tested up to: 3.2
-Stable tag: 0.1.2.4
+Tested up to: 3.2.1
+Stable tag: 0.1.2.5
 
 == Description ==
 
@@ -15,6 +15,9 @@ For clients only! Do not install this plugin! Do not ask for support!
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.2.5 =
+* Fixed Bing/Yahoo switched codes
 
 = 0.1.2.4 =
 * Added gallery fix
