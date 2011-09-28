@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfection has no description.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.2.5
+Version: 0.1.2.6
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011 Ciprian Popescu
@@ -39,7 +39,7 @@ if(!defined('WP_PLUGIN_DIR'))
 
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/wp-perfect-plugin');
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/wp-perfect-plugin');
-define('W3P_VERSION', '0.1.2.4');
+define('W3P_VERSION', '0.1.2.6');
 //
 
 // Begin Code
@@ -50,7 +50,7 @@ function w3p_plugin_menu() {
 	add_submenu_page('w3p', 'W3P Webmaster', 'W3P Webmaster', 'manage_options', 'w3p-webmaster', 'all_in_one_webmaster_options_page');
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
 	add_submenu_page('w3p', 'W3P Feed Options', 'W3P Feed Options', 'manage_options', 'w3p-feedburner', 'ol_feedburner_options_subpanel');
-	add_submenu_page('w3p', 'W3P SEO', 'W3P SEO', 'manage_options', 'w3p-seo', 'w3p_seo_options');
+	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
 }
 
 function add_w3p_admin_css() {

@@ -4,13 +4,9 @@ add_option('all_in_one_google_webmaster', '');
 add_option('all_in_one_bing_webmaster', '');
 add_option('all_in_one_yahoo_webmaster', '');
 add_option('all_in_one_alexa_webmaster', '');
-add_option('all_in_one_bcatalog_webmaster', '');
-add_option('all_in_one_fbinsights_webmaster', '');
 
 add_option('all_in_one_google_analytics', '');
-add_option('sitemap_URL', '');
 add_option('all_in_one_compete_analytics', '');
-add_option('all_in_one_sitemeter_analytics', '');
 
 add_option('all_in_one_head_section', '');
 add_option('all_in_one_footer_section', '');
@@ -18,9 +14,6 @@ add_option('all_in_one_footer_section', '');
 function all_in_one_webmaster_head() {
 	$google_wm = get_option('all_in_one_google_webmaster');
 	$alexa_wm = get_option('all_in_one_alexa_webmaster');
-	$bcatalog_wm = get_option('all_in_one_bcatalog_webmaster');
-	$fbinsights_wm = get_option('all_in_one_fbinsights_webmaster');
-
 	$bing_wm = get_option('all_in_one_bing_webmaster');
 	$yahoo_wm = get_option('all_in_one_yahoo_webmaster');
 	$google_an = get_option('all_in_one_google_analytics');
@@ -46,10 +39,6 @@ function all_in_one_webmaster_head() {
 		$alexa_wm_meta = '<meta name="alexaVerifyID" content="' . $alexa_wm . '" />';
 		echo $alexa_wm_meta . "\n";
 	}
-	if(!($bcatalog_wm == "")) {
-		$bcatalog_wm_meta = '<meta name="blogcatalog" content="' . $bcatalog_wm . '" />';
-		echo $bcatalog_wm_meta . "\n";
-	}
 	if(!($google_an == "")) {
 		echo '<script type="text/javascript">'."\n";
 		echo 'var _gaq = _gaq || [];'."\n";
@@ -67,9 +56,7 @@ function all_in_one_webmaster_head() {
 
 function all_in_one_webmaster_footer() {
 	$compete_an = get_option('all_in_one_compete_analytics');
-
 	$footer_section = get_option('all_in_one_footer_section');
-	$sitemeter_an = get_option('all_in_one_sitemeter_analytics');
 
 	if(!($footer_section == "")) {
 		echo $footer_section . "\n";
@@ -88,13 +75,10 @@ function all_in_one_webmaster_options_page() {
 	if(isset($_POST['info_update1'])) {
 		update_option('all_in_one_google_webmaster', (string)$_POST["all_in_one_google_webmaster"]);
 		update_option('all_in_one_alexa_webmaster', (string)$_POST["all_in_one_alexa_webmaster"]);
-		update_option('all_in_one_bcatalog_webmaster', (string)$_POST["all_in_one_bcatalog_webmaster"]);
 		update_option('all_in_one_bing_webmaster', (string)$_POST["all_in_one_bing_webmaster"]);
 		update_option('all_in_one_yahoo_webmaster', (string)$_POST['all_in_one_yahoo_webmaster']);
 		update_option('all_in_one_google_analytics', (string)$_POST['all_in_one_google_analytics']);
 		update_option('all_in_one_compete_analytics', (string)$_POST['all_in_one_compete_analytics']);
-
-		update_option('all_in_one_sitemeter_analytics', stripslashes_deep((string)$_POST['all_in_one_sitemeter_analytics']));
 		update_option('all_in_one_head_section', stripslashes_deep((string)$_POST['all_in_one_head_section']));
 		update_option('all_in_one_footer_section', stripslashes_deep((string)$_POST['all_in_one_footer_section']));
 
@@ -123,10 +107,6 @@ function all_in_one_webmaster_options_page() {
 				<input name="all_in_one_alexa_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_alexa_webmaster'); ?>" /> <label>Alexa Rank</label>
 				<br /><small class="description">(meta name="alexaVerifyID" content="<code>OKJ3RsasdfKHGST1uqa8zcBfrjtY</code>")</small>
 			</p>
-			<p>
-				<input name="all_in_one_bcatalog_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_bcatalog_webmaster'); ?>" /> <label>Blog Catalog</label>
-				<br /><small class="description">(meta name="blogcatalog" content="<code>7DS9234212</code>")</small>
-			</p>
 
 			<hr />
 			<h3>Analytics Options</h3>
@@ -138,19 +118,15 @@ function all_in_one_webmaster_options_page() {
 				<input name="all_in_one_compete_analytics" type="text" size="55" value="<?php echo get_option('all_in_one_compete_analytics'); ?>" /> <label>Compete Analytics</label>
 				<br /><small class="description">(__compete_code = '<code>07a543238f9kdwjga0d280bd70534990a</code>')</small>
 			</p>
-			<p>
-				<input name="all_in_one_sitemeter_analytics" type="text" size="55" value="<?php echo get_option('all_in_one_sitemeter_analytics'); ?>" /> <label>SiteMeter Analytics/Tracking</label>
-				<br /><small class="description">(src="<code>http://s44.sitemeter.com/js/counter.js?site=s44AShah</code>")</small>
-			</p>
 
 			<hr />
 			<h3>Extra HTML code to be inserted in to Header or Footer Section</h3>
 			<p>
-				Header section: Add ONLY HTML code to the <code>head</code> of your blog<br />
+				Add code to the <code>head</code> of your blog<br />
 				<textarea name="all_in_one_head_section" cols="60" rows="3"><?php echo get_option('all_in_one_head_section'); ?></textarea>
 			</p>
 			<p>
-				Footer section: Add ONLY HTML code to the <code>footer</code> of your blog<br />
+				Add code to the <code>footer</code> of your blog<br />
 				<textarea name="all_in_one_footer_section" cols="60" rows="3"><?php echo get_option('all_in_one_footer_section'); ?></textarea>
 			</p>
 

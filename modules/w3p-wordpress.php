@@ -37,14 +37,6 @@ function w3p_admin_menu() {
 }
 add_action('admin_menu', 'w3p_admin_menu');
 
-// Add warnings
-function w3p_admin_notice() {
-	global $current_screen;
-	if($current_screen->parent_base == 'options-general')
-		echo '<p class="message-box alert">Warning - changing settings on these pages may cause problems with your website\'s design!</p>';
-}
-add_action('admin_notices', 'w3p_admin_notice');
-
 // Various // To be sorted
 // This module helps you to keep the link juice by redirecting all non-existing URLs which normally return a 404 error to the front blog page using 301 redirect.
 class noMissingPages {
