@@ -4,7 +4,7 @@ Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 0.1.2.6
+Stable tag: 0.1.2.7
 
 == Description ==
 
@@ -15,6 +15,11 @@ For clients only! Do not install this plugin! Do not ask for support!
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.2.7 =
+* Removed a duplicate option
+* Fixed Google PageRank URL due the October 2011 algorythm change (changed parameter "search" to "tbr")
+* Simplified the SEO Tracker module
 
 = 0.1.2.6 =
 * Removed Blog Catalog code

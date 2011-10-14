@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfection has no description.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.2.6
+Version: 0.1.2.7
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011 Ciprian Popescu
@@ -39,7 +39,7 @@ if(!defined('WP_PLUGIN_DIR'))
 
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/wp-perfect-plugin');
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/wp-perfect-plugin');
-define('W3P_VERSION', '0.1.2.6');
+define('W3P_VERSION', '0.1.2.7');
 //
 
 // Begin Code
@@ -78,7 +78,7 @@ function w3p_plugin_main() {
 			<li><strong>Google Feedburner</strong> - This module redirects traffic for your feeds to a Google FeedBurner feed you have created. Google FeedBurner can then track all of your feed subscriber traffic and usage and apply a variety of features you choose to improve and enhance your original WordPress feed. Google FeedBurner's services allow publishers who already have a feed to improve their understanding of and relationship with their audience. Once you have a working feed, run it through FeedBurner and realize a whole new set of benefits.</li>
 			<li><strong>Webmaster Settings</strong> - A complete solution for your webmaster <code>meta</code> keys, verifications and analytics needs. Migrates data from AIO Webmaster plugin. Uses the latest Google Analytics tracking code.</li>
 			<li><strong>Child Redirect</strong> - This module does a 301 redirect on top-level parent pages to their first child page, based first on menu order, then post title if no menu order is set.</li>
-			<li><strong>SEO/SERP</strong> - This module features a SEO/SERP tracker for various ranks, backlinks, subscribers and followers. Useful to keep track of site SEO progress.</li>
+			<li><strong>SEO/SERP</strong> - This module features a SEO/SERP tracker for various ranks and backlinks. Useful to keep track of site SEO progress.</li>
 		</ul>
 		<h3>Current Shortcodes</h3>
 		<ul>
@@ -107,6 +107,8 @@ function w3p_plugin_options() {
 	// read in existing option value from database
     $option_value_w3p_email = get_option('w3p_email');
 	$w3p_email = get_option('w3p_email');
+	if($w3p_email == '')
+		$w3p_email = 'none';
 
     // See if the user has posted us some information // if they did, this hidden field will be set to 'Y'
 	if(isset($_POST[$hidden_field_name]) && $_POST[$hidden_field_name] == 'Y') {
@@ -164,7 +166,6 @@ include('modules/w3p-contact-form.php');
 include('modules/w3p-google-streetview.php');
 include('modules/w3p-google-maps.php');
 
-include('modules/w3p-seo-rank.php');
 include('modules/w3p-seo.php');
 
 include('modules/w3p-misc.php');
