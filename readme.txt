@@ -4,17 +4,22 @@ Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 0.1.2.7
+Stable tag: 0.1.4
 
 == Description ==
 
-For clients only! Do not install this plugin! Do not ask for support!
+Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
+
+It also provides a simple SEO tracking function showing several SEO/SERP statistics and ranks.
 
 == Installation ==
 
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.4 =
+* Official public release
 
 = 0.1.2.7 =
 * Removed a duplicate option

@@ -2,10 +2,10 @@
 /*
 Plugin Name: WordPress Perfect Plugin
 Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
-Description: Perfection has no description.
+Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.2.7
+Version: 0.1.4
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011 Ciprian Popescu
@@ -39,7 +39,7 @@ if(!defined('WP_PLUGIN_DIR'))
 
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/wp-perfect-plugin');
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/wp-perfect-plugin');
-define('W3P_VERSION', '0.1.2.7');
+define('W3P_VERSION', '0.1.4');
 //
 
 // Begin Code
@@ -69,7 +69,7 @@ function w3p_plugin_main() {
 		<div id="icon-options-general" class="icon32"></div>
 		<h2>Perfect Plugin Settings</h2>
 		<?php include('includes/sidebar.php');?>
-		<p>Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analyics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
+		<p>Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
 
 		<img src="<?php echo W3P_PLUGIN_URL;?>/images/icon-32.png" alt="" />
 		<h3>Current Modules</h3>
@@ -142,11 +142,7 @@ function w3p_plugin_options() {
 // Security modules // built-in
 /*
 Plugin Name: Block Bad Queries
-Plugin URI: http://perishablepress.com/press/2009/12/22/protect-wordpress-against-malicious-url-requests/
 Description: Protect WordPress Against Malicious URL Requests
-Author URI: http://perishablepress.com/
-Author: Perishable Press
-Version: 1.0
 */
 if(strpos($_SERVER['REQUEST_URI'], "eval(") || strpos($_SERVER['REQUEST_URI'], "CONCAT") || strpos($_SERVER['REQUEST_URI'], "UNION+SELECT") || strpos($_SERVER['REQUEST_URI'], "base64")) {
 	@header("HTTP/1.1 400 Bad Request");
@@ -160,7 +156,6 @@ if(strpos($_SERVER['REQUEST_URI'], "eval(") || strpos($_SERVER['REQUEST_URI'], "
 include('modules/w3p-wordpress.php');
 include('modules/w3p-feedburner.php');
 include('modules/w3p-basic-settings.php');
-//include('modules/w3p-child-redirect.php');
 include('modules/w3p-list-subpages.php');
 include('modules/w3p-contact-form.php');
 include('modules/w3p-google-streetview.php');
@@ -169,9 +164,6 @@ include('modules/w3p-google-maps.php');
 include('modules/w3p-seo.php');
 
 include('modules/w3p-misc.php');
-// REMOVE GALLERY FIX FROM ARTICOLEPLAJA.RO WHEN UPDATING!!!!!
-
-
 
 // Native WP pagination function
 /*

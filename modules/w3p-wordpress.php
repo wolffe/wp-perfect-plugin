@@ -32,9 +32,9 @@ function w3p_admin_footer_text( $default_text ) {
 add_filter('admin_footer_text', 'w3p_admin_footer_text');
 
 // Remove unnecessary links from the menu
-function w3p_admin_menu() {
-	remove_menu_page('link-manager.php');
-}
+//function w3p_admin_menu() {
+//	remove_menu_page('link-manager.php');
+//}
 add_action('admin_menu', 'w3p_admin_menu');
 
 // Various // To be sorted
