@@ -20,7 +20,7 @@ function simple_streetview_div($string, $attr_string, $k=0) {
 
 	if ($attributes = simple_streetview_attr2arr($attr_string)) {
 
-		$javascript = "<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=false\"></script>
+		$javascript = "
 		<script type='text/javascript'>
 		  	var myLatlng = new google.maps.LatLng(".$attributes['lat'].",".$attributes['lng'].");
 			var panoramaOptions = {

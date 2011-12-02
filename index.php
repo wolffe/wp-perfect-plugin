@@ -55,6 +55,7 @@ function w3p_plugin_menu() {
 
 function add_w3p_additional_css() {
 	echo '<link rel="stylesheet" href="'.W3P_PLUGIN_URL.'/css/additional.css" type="text/css" />';
+	echo '<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>';
 }
 function add_w3p_admin_css() {
 	echo '<link type="text/css" rel="stylesheet" href="'.W3P_PLUGIN_URL.'/css/admin.css" />'."\n";

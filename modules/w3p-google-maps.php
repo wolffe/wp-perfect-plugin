@@ -27,7 +27,6 @@ function mapme($attr) {
 	//add_action('wp_head', 'gmaps_header');
 	$returnme = '
 		<div class="w3p-google-maps" id="' .$attr['id'] . '" style="width:' . $attr['w'] . 'px;height:' . $attr['h'] . 'px;border:1px solid gray;"></div><br />
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
 		var latlng = new google.maps.LatLng(' . $attr['lat'] . ', ' . $attr['lon'] . ');
 		var myOptions = {
