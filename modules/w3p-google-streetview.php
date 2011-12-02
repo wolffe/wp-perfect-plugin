@@ -1,31 +1,4 @@
 <?php 
-/*
-Plugin Name: Simple Google Street View
-Description: Adds the functionality to add Google Street View windows to your posts and pages without the need of a google API key.
-Version: 0.4
-Author: PJ Volders
-Author URI: http://www.pjvolders.be/
-License: GPL2
-*/
-
-/*  Copyright 2010  Pieter-Jan Volders  (email : support@pjvolders.be)
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as 
-	published by the Free Software Foundation.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/*	THEME */
-
 // Run the filter when a blog is shown
 add_filter( 'the_content', 'filter_simple_streetview' );
 
@@ -46,8 +19,9 @@ function filter_simple_streetview($content) {
 function simple_streetview_div($string, $attr_string, $k=0) {
 
 	if ($attributes = simple_streetview_attr2arr($attr_string)) {
-		
-		$javascript = "<script type='text/javascript'>
+
+		$javascript = "<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=false\"></script>
+		<script type='text/javascript'>
 		  	var myLatlng = new google.maps.LatLng(".$attributes['lat'].",".$attributes['lng'].");
 			var panoramaOptions = {
 			  position: myLatlng,
@@ -94,15 +68,6 @@ function simple_streetview_style($arr) {
 	return $style;
 	
 }
-
-// javascript for google maps
-add_action( 'init', 'simple_streetview_gmjs' );
-
-function simple_streetview_gmjs() {
-	wp_register_script('googlemaps', 'http://maps.google.com/maps/api/js?sensor=false');
-	wp_enqueue_script('googlemaps');
-}
-
 
 /* Editor */
 

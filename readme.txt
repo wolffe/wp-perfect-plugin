@@ -4,7 +4,7 @@ Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 0.1.4
+Stable tag: 0.1.4.2
 
 == Description ==
 
@@ -17,6 +17,15 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.4.2 =
+* Added additional (override) style for pages (Google Maps inner images background)
+* Improved page speed by removing Google Maps API calls on pages without Google Maps or StreetView
+* Removed a getButterfly link
+* Removed an empty header call
+
+= 0.1.4.1 =
+* Removed Yahoo Site Explorer as it's no longer relevant
 
 = 0.1.4 =
 * Official public release

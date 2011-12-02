@@ -1,16 +1,4 @@
 <?php
-/*
-Plugin Name: Google Maps v3 Shortcode
-Plugin URI: http://gis.yohman.com
-Description: This plugin allows you to add one or more maps to your page/post using shortcodes.  Features include:  multiple maps on the same page, specify location by address or lat/lon combo, add kml, show traffic, add your own custom image icon, set map size.
-Version: 1.02
-Author: yohda
-Author URI: http://gis.yohman.com/
-*/
-
-// Add the google maps api to header
-add_action('wp_head', 'gmaps_header');
-
 function gmaps_header() {
 	?>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -36,8 +24,10 @@ function mapme($attr) {
 		'infowindow' => ''
 	), $attr);
 
+	//add_action('wp_head', 'gmaps_header');
 	$returnme = '
-		<div id="' .$attr['id'] . '" style="width:' . $attr['w'] . 'px;height:' . $attr['h'] . 'px;border:1px solid gray;"></div><br />
+		<div class="w3p-google-maps" id="' .$attr['id'] . '" style="width:' . $attr['w'] . 'px;height:' . $attr['h'] . 'px;border:1px solid gray;"></div><br />
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
 		var latlng = new google.maps.LatLng(' . $attr['lat'] . ', ' . $attr['lon'] . ');
 		var myOptions = {
@@ -151,25 +141,14 @@ function mapme($attr) {
 				google.maps.event.addListener(marker, \'click\', function() {
 				  infowindow.open(' . $attr['id'] . ',marker);
 				});
-
-
-infowindow.open(map1,marker);
-
+				infowindow.open(map1,marker);
 				';
 			}
-
-
 		}
 
-		$returnme .= '</script>';
-		
-		return $returnme;
-	?>
-    
+	$returnme .= '</script>';
 
-	<?php
+	return $returnme;
 }
 add_shortcode('map', 'mapme');
-
-
 ?>

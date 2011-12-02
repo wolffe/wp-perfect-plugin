@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.4
+Version: 0.1.4.2
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011 Ciprian Popescu
@@ -39,7 +39,7 @@ if(!defined('WP_PLUGIN_DIR'))
 
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/wp-perfect-plugin');
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/wp-perfect-plugin');
-define('W3P_VERSION', '0.1.4');
+define('W3P_VERSION', '0.1.4.2');
 //
 
 // Begin Code
@@ -53,10 +53,14 @@ function w3p_plugin_menu() {
 	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
 }
 
+function add_w3p_additional_css() {
+	echo '<link rel="stylesheet" href="'.W3P_PLUGIN_URL.'/css/additional.css" type="text/css" />';
+}
 function add_w3p_admin_css() {
 	echo '<link type="text/css" rel="stylesheet" href="'.W3P_PLUGIN_URL.'/css/admin.css" />'."\n";
 }
 
+add_action('wp_head', 'add_w3p_additional_css');
 add_action('admin_head', 'add_w3p_admin_css');
 add_action('admin_menu', 'w3p_plugin_menu');
 

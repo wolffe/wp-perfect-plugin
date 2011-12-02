@@ -2,7 +2,6 @@
 // default values
 add_option('all_in_one_google_webmaster', '');
 add_option('all_in_one_bing_webmaster', '');
-add_option('all_in_one_yahoo_webmaster', '');
 add_option('all_in_one_alexa_webmaster', '');
 
 add_option('all_in_one_google_analytics', '');
@@ -15,7 +14,6 @@ function all_in_one_webmaster_head() {
 	$google_wm = get_option('all_in_one_google_webmaster');
 	$alexa_wm = get_option('all_in_one_alexa_webmaster');
 	$bing_wm = get_option('all_in_one_bing_webmaster');
-	$yahoo_wm = get_option('all_in_one_yahoo_webmaster');
 	$google_an = get_option('all_in_one_google_analytics');
 
 	$head_section = get_option('all_in_one_head_section');
@@ -30,10 +28,6 @@ function all_in_one_webmaster_head() {
 	if(!($bing_wm == "")) {
 		$bing_wm_meta = '<meta name="msvalidate.01" content="' . $bing_wm . '" />';
 		echo $bing_wm_meta . "\n";
-	}
-	if(!($yahoo_wm == "")) {
-		$yahoo_wm_meta = '<meta name="y_key" content="' . $yahoo_wm . '" />';
-		echo $yahoo_wm_meta . "\n";
 	}
 	if(!($alexa_wm == "")) {
 		$alexa_wm_meta = '<meta name="alexaVerifyID" content="' . $alexa_wm . '" />';
@@ -76,7 +70,6 @@ function all_in_one_webmaster_options_page() {
 		update_option('all_in_one_google_webmaster', (string)$_POST["all_in_one_google_webmaster"]);
 		update_option('all_in_one_alexa_webmaster', (string)$_POST["all_in_one_alexa_webmaster"]);
 		update_option('all_in_one_bing_webmaster', (string)$_POST["all_in_one_bing_webmaster"]);
-		update_option('all_in_one_yahoo_webmaster', (string)$_POST['all_in_one_yahoo_webmaster']);
 		update_option('all_in_one_google_analytics', (string)$_POST['all_in_one_google_analytics']);
 		update_option('all_in_one_compete_analytics', (string)$_POST['all_in_one_compete_analytics']);
 		update_option('all_in_one_head_section', stripslashes_deep((string)$_POST['all_in_one_head_section']));
@@ -98,10 +91,6 @@ function all_in_one_webmaster_options_page() {
 			<p>
 				<input name="all_in_one_bing_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_bing_webmaster'); ?>" /> <label>Bing Webmaster Center</label>
 				<br /><small class="description">(meta name="msvalidate.01" content="<code>ASBKDW71D43Z67AB2D39636C89B88A</code>")</small>
-			</p>
-			<p>
-				<input name="all_in_one_yahoo_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_yahoo_webmaster'); ?>" /> <label>Yahoo Site Explorer</label>
-				<br /><small class="description">(meta name="y_key" content="<code>98D5S31a48dd7fc</code>")</small>
 			</p>
 			<p>
 				<input name="all_in_one_alexa_webmaster" type="text" size="55" value="<?php echo get_option('all_in_one_alexa_webmaster'); ?>" /> <label>Alexa Rank</label>

@@ -9,7 +9,7 @@ function w3p_login_logo() {
 }
 function w3p_login_url() {
 	echo bloginfo('url');
-	//return 'http://www.blogtycoon.net/'; // Replace with custom URL
+	//return 'http://getbutterfly.com/'; // Replace with custom URL
 }
 function w3p_login_title() {
 	echo get_option('blogname');
@@ -22,20 +22,6 @@ function w3p_login_message() {
 add_action('login_head', 'w3p_login_logo');
 add_filter('login_headerurl', 'w3p_login_url');
 add_filter('login_headertitle', 'w3p_login_title');
-//add_filter('login_message', 'w3p_login_message');
-
-// Perfect Dashboard Branding
-function w3p_admin_footer_text( $default_text ) {
-	return '<span id="footer-thankyou">Website managed by <a href="http://getbutterfly.com/">getButterfly</a><span> | Powered by <a href="http://wordpress.org/">WordPress</a>';
-}
-
-add_filter('admin_footer_text', 'w3p_admin_footer_text');
-
-// Remove unnecessary links from the menu
-//function w3p_admin_menu() {
-//	remove_menu_page('link-manager.php');
-//}
-add_action('admin_menu', 'w3p_admin_menu');
 
 // Various // To be sorted
 // This module helps you to keep the link juice by redirecting all non-existing URLs which normally return a 404 error to the front blog page using 301 redirect.
