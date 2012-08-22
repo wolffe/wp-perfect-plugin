@@ -3,8 +3,8 @@ Contributors: butterflymedia, getbutterfly
 Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
-Tested up to: 3.3
-Stable tag: 0.1.4.2
+Tested up to: 3.4.1
+Stable tag: 0.1.5
 
 == Description ==
 
@@ -17,6 +17,11 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.5 =
+* Merged with SEO Love plugin
+* Merged with Smashing Analytics plugin (update/migration is possible)
+* Removed hardcoded path
 
 = 0.1.4.2 =
 * Added additional (override) style for pages (Google Maps inner images background)

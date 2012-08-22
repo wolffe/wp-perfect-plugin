@@ -5,10 +5,10 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.4.2
+Version: 0.1.5
 
 WordPress Perfect Plugin
-Copyright (C) 2010, 2011 Ciprian Popescu
+Copyright (C) 2010, 2011, 2012 Ciprian Popescu (getbutterfly@gmail.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,22 +24,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-error_reporting(0); // Used for debug
+//error_reporting(0); // Used for debug
 // w3p is wppp - wordpress perfect plugin - 3 p's // get it? // :|
 
 //
-if(!defined('WP_CONTENT_URL'))
-	define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
-if(!defined('WP_PLUGIN_URL'))
-	define('WP_PLUGIN_URL', WP_CONTENT_URL.'/plugins');
-if(!defined('WP_CONTENT_DIR'))
-	define('WP_CONTENT_DIR', ABSPATH.'wp-content');
-if(!defined('WP_PLUGIN_DIR'))
-	define('WP_PLUGIN_DIR', WP_CONTENT_DIR.'/plugins');
+define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/'.dirname(plugin_basename(__FILE__)));
+define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__)));
+define('W3P_VERSION', '0.1.5');
+//
 
-define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/wp-perfect-plugin');
-define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/wp-perfect-plugin');
-define('W3P_VERSION', '0.1.4.2');
+// plugin localization
+$plugin_dir = basename(dirname(__FILE__)); 
+load_plugin_textdomain('w3p', false, $plugin_dir.'/languages'); 
 //
 
 // Begin Code
@@ -51,6 +47,8 @@ function w3p_plugin_menu() {
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
 	add_submenu_page('w3p', 'W3P Feed Options', 'W3P Feed Options', 'manage_options', 'w3p-feedburner', 'ol_feedburner_options_subpanel');
 	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
+
+	add_submenu_page('w3p', 'W3P Analytics', 'W3P Analytics', 'manage_options', __FILE__, 'iriwpsa');
 }
 
 function add_w3p_additional_css() {
@@ -84,7 +82,23 @@ function w3p_plugin_main() {
 			<li><strong>Webmaster Settings</strong> - A complete solution for your webmaster <code>meta</code> keys, verifications and analytics needs. Migrates data from AIO Webmaster plugin. Uses the latest Google Analytics tracking code.</li>
 			<li><strong>Child Redirect</strong> - This module does a 301 redirect on top-level parent pages to their first child page, based first on menu order, then post title if no menu order is set.</li>
 			<li><strong>SEO/SERP</strong> - This module features a SEO/SERP tracker for various ranks and backlinks. Useful to keep track of site SEO progress.</li>
-		</ul>
+			<li><strong>Analytics</strong> - This module, a highly improved fork of StatPress, shows you real time statistics about your site. It collects information about visitors, spiders, search keywords, feeds, browsers, OS etc. Once active, it immediately starts to collect information.</li>
+* %thistotalvisits% - this page, total visits
+* %since% - Date of the first hit
+* %visits% - Today visits
+* %totalvisits% - Total visits
+* %os% - Operative system
+* %browser% - Browser
+* %ip% - IP address
+* %visitorsonline% - Counts all online visitors
+* %usersonline% - Counts logged online visitors
+* %toppost% - The most viewed Post
+* %topbrowser% - The most used Browser
+* %topos% - The most used O.S.
+* %thistotalpages% - Total pageviews so far
+* %pagestoday% - Pageviews today
+* %pagesyesterday% - Pageviews yesterday
+* %latesthits%		</ul>
 		<h3>Current Shortcodes</h3>
 		<ul>
 			<li><strong>List Subpages</strong> - Use the <code>[subpages]</code> shortcode that lists the sub pages of the current page as a <code>ul/li</code> list, allowing you to use parent pages in a similar way to categories. The <code>ul</code> structure is ready for styling using this class - <code>&lt;ul class=&quot;w3p-subpages&quot;&gt;</code>.</li>
@@ -95,6 +109,7 @@ function w3p_plugin_main() {
 				Default value = <strong>ROADMAP</strong> | Accepted values = ROADMAP | SATELLITE | HYBRID | TERRAIN // <strong>lat</strong> and <strong>lon</strong> parameters are optional. <strong>address</strong> parameter is mandatory.
 			</li>
 			<li><strong>Google Streetview</strong> - Use the StreetView editor button (<img src="<?php echo W3P_PLUGIN_URL;?>/modules/icon-streetview.png" alt="" />) to open a popup and add your address.</li>
+			<li><strong>SEO Love</strong> - Add the <code>[seo_love]</code> shortcode to any post or page to display the search bar, or add the <code>&lt;?php echo seo_love();?&gt;</code> PHP function to your blog template. The plugin allows the author/user to search for the post title on the major search engines, Google, Yahoo, Bing and Ask. The purpose of this search is to check the competition for any given title, or to check the indexation for any given post.</li>
 		</ul>
 
 
@@ -169,6 +184,10 @@ include('modules/w3p-google-maps.php');
 include('modules/w3p-seo.php');
 
 include('modules/w3p-misc.php');
+
+// Begin other
+include('mod-analytics.php');
+
 
 // Native WP pagination function
 /*
