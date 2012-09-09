@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.5
+Version: 0.1.5.1
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011, 2012 Ciprian Popescu (getbutterfly@gmail.com)
@@ -25,12 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //error_reporting(0); // Used for debug
-// w3p is wppp - wordpress perfect plugin - 3 p's // get it? // :|
 
 //
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/'.dirname(plugin_basename(__FILE__)));
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__)));
-define('W3P_VERSION', '0.1.5');
+define('W3P_VERSION', '0.1.5.1');
 //
 
 // plugin localization
@@ -48,7 +47,8 @@ function w3p_plugin_menu() {
 	add_submenu_page('w3p', 'W3P Feed Options', 'W3P Feed Options', 'manage_options', 'w3p-feedburner', 'ol_feedburner_options_subpanel');
 	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
 
-	add_submenu_page('w3p', 'W3P Analytics', 'W3P Analytics', 'manage_options', __FILE__, 'iriwpsa');
+	if(get_option('w3p_analytics_run') == 1)
+		add_submenu_page('w3p', 'W3P Analytics', 'W3P Analytics', 'manage_options', __FILE__, 'iriwpsa');
 }
 
 function add_w3p_additional_css() {
@@ -109,7 +109,7 @@ function w3p_plugin_main() {
 				Default value = <strong>ROADMAP</strong> | Accepted values = ROADMAP | SATELLITE | HYBRID | TERRAIN // <strong>lat</strong> and <strong>lon</strong> parameters are optional. <strong>address</strong> parameter is mandatory.
 			</li>
 			<li><strong>Google Streetview</strong> - Use the StreetView editor button (<img src="<?php echo W3P_PLUGIN_URL;?>/modules/icon-streetview.png" alt="" />) to open a popup and add your address.</li>
-			<li><strong>SEO Love</strong> - Add the <code>[seo_love]</code> shortcode to any post or page to display the search bar, or add the <code>&lt;?php echo seo_love();?&gt;</code> PHP function to your blog template. The plugin allows the author/user to search for the post title on the major search engines, Google, Yahoo, Bing and Ask. The purpose of this search is to check the competition for any given title, or to check the indexation for any given post.</li>
+			<li><strong>SEO Love</strong> - Add the <code>[seo_love]</code> shortcode to any post or page to display the search bar, or add the <code>&lt;?php echo seo_love();?&gt;</code> PHP function to your blog template. The plugin allows the author/user to search for the post title on the major search engines, Google, Bing and Ask. The purpose of this search is to check the competition for any given title, or to check the indexation for any given post.</li>
 		</ul>
 
 
@@ -121,38 +121,49 @@ function w3p_plugin_main() {
 }
 
 function w3p_plugin_options() {
-	$hidden_field_name = 'w3p_submit_hidden';
-	$w3p_email_field_name = 'w3p_email';
+	if(isset($_POST['saveMe'])) {
+		$w3p_email = $_POST['w3p_email'];
+		$w3p_analytics_run = $_POST['w3p_analytics_run'];
+		$w3p_feedburner = $_POST['w3p_feedburner'];
 
-	// read in existing option value from database
-    $option_value_w3p_email = get_option('w3p_email');
-	$w3p_email = get_option('w3p_email');
-	if($w3p_email == '')
-		$w3p_email = 'none';
-
-    // See if the user has posted us some information // if they did, this hidden field will be set to 'Y'
-	if(isset($_POST[$hidden_field_name]) && $_POST[$hidden_field_name] == 'Y') {
-		$option_value_w3p_email = $_POST[$w3p_email_field_name];
-
-		update_option('w3p_email', $option_value_w3p_email);
+		update_option('w3p_email', $w3p_email);
+		update_option('w3p_analytics_run', $w3p_analytics_run);
+		update_option('w3p_feedburner', $w3p_feedburner);
 		?>
 		<div class="updated"><p><strong>Settings saved.</strong></p></div>
 		<?php
 	}
+
+	// read in existing option value from database
+    $option_value_w3p_email = get_option('w3p_email');
+    $option_value_w3p_feedburner = get_option('w3p_feedburner');
+	$w3p_email = get_option('w3p_email');
+	if($w3p_email == '')
+		$w3p_email = 'none';
 	?>
 	<div class="wrap">
 		<div id="icon-options-general" class="icon32"></div>
 		<h2>Perfect Settings</h2>
 
 		<form name="form1" method="post" action="">
-			<input type="hidden" name="<?php echo $hidden_field_name;?>" value="Y" />
 			<p>
-				<input type="text" name="<?php echo $w3p_email_field_name;?>" id="<?php echo $w3p_email_field_name;?>" value="<?php echo $option_value_w3p_email;?>" size="40" /> <label for="<?php echo $w3p_email_field_name;?>">Contact Form Email</label>
+				<input type="text" name="w3p_email" id="w3p_email" value="<?php echo $option_value_w3p_email;?>" size="40" /> <label for="w3p_email">Contact Form Email</label>
 				<br />
 				<span class="description"><small>Contact emails will be sent to this address (currently set to <strong><?php echo $w3p_email;?></strong>).</small></span>
 			</p>
+			<p>
+				<input name="w3p_feedburner" id="w3p_feedburner" type="text" value="<?php echo $option_value_w3p_feedburner;?>" /> <label for="w3p_feedburner">FeedBurner username</label>
+			</p>
+			<h3>Modules</h3>
+			<p>
+				<select name="w3p_analytics_run">
+					<option value="1"<?php if(get_option('w3p_analytics_run') == '1') echo ' selected="selected"';?>>Enable analytics module</option>
+					<option value="0"<?php if(get_option('w3p_analytics_run') == '0') echo ' selected="selected"';?>>Disable analytics module</option>
+				</select> 
+				<br /><small>Disable this module if it causes high load to your server.</small>
+			</p>
 			<p class="submit">
-				<input type="submit" name="submit" class="button-primary" value="Save Changes" />
+				<input type="submit" name="saveMe" class="button-primary" value="Save Changes" />
 			</p>
 		</form>
 	</div>
@@ -186,7 +197,8 @@ include('modules/w3p-seo.php');
 include('modules/w3p-misc.php');
 
 // Begin other
-include('mod-analytics.php');
+if(get_option('w3p_analytics_run') == 1)
+	include('mod-analytics.php');
 
 
 // Native WP pagination function

@@ -1,4 +1,219 @@
 <?php
+//global variable 
+$alexa_backlink=0; 
+$alexa_reach=0; 
+
+//--> for google pagerank 
+function StrToNum($Str, $Check, $Magic) 
+{ 
+    $Int32Unit = 4294967296;  // 2^32 
+
+    $length = strlen($Str);
+    for ($i = 0; $i < $length; $i++) { 
+        $Check *= $Magic;      
+        //If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31), 
+        //  the result of converting to integer is undefined 
+        //  refer to http://www.php.net/manual/en/language.types.integer.php 
+        if ($Check >= $Int32Unit) { 
+            $Check = ($Check - $Int32Unit * (int) ($Check / $Int32Unit)); 
+            //if the check less than -2^31 
+            $Check = ($Check < -2147483648) ? ($Check + $Int32Unit) : $Check; 
+        } 
+        $Check += ord($Str{$i}); 
+    } 
+    return $Check; 
+} 
+
+//--> for google pagerank 
+/* 
+* Genearate a hash for a url 
+*/ 
+function HashURL($String) 
+{ 
+    $Check1 = StrToNum($String, 0x1505, 0x21); 
+    $Check2 = StrToNum($String, 0, 0x1003F); 
+
+    $Check1 >>= 2;      
+    $Check1 = (($Check1 >> 4) & 0x3FFFFC0 ) | ($Check1 & 0x3F); 
+    $Check1 = (($Check1 >> 4) & 0x3FFC00 ) | ($Check1 & 0x3FF); 
+    $Check1 = (($Check1 >> 4) & 0x3C000 ) | ($Check1 & 0x3FFF);    
+    
+    $T1 = (((($Check1 & 0x3C0) << 4) | ($Check1 & 0x3C)) <<2 ) | ($Check2 & 0xF0F ); 
+    $T2 = (((($Check1 & 0xFFFFC000) << 4) | ($Check1 & 0x3C00)) << 0xA) | ($Check2 & 0xF0F0000 ); 
+    
+    return ($T1 | $T2); 
+} 
+
+//--> for google pagerank 
+/* 
+* genearate a checksum for the hash string 
+*/ 
+function CheckHash($Hashnum) 
+{ 
+    $CheckByte = 0; 
+    $Flag = 0; 
+
+    $HashStr = sprintf('%u', $Hashnum) ; 
+    $length = strlen($HashStr); 
+    
+    for ($i = $length - 1;  $i >= 0;  $i --) { 
+        $Re = $HashStr{$i}; 
+        if (1 === ($Flag % 2)) {              
+            $Re += $Re;      
+            $Re = (int)($Re / 10) + ($Re % 10); 
+        } 
+        $CheckByte += $Re; 
+        $Flag ++;    
+    } 
+
+    $CheckByte %= 10; 
+    if (0 !== $CheckByte) { 
+        $CheckByte = 10 - $CheckByte; 
+        if (1 === ($Flag % 2) ) { 
+            if (1 === ($CheckByte % 2)) { 
+                $CheckByte += 9; 
+            } 
+            $CheckByte >>= 1; 
+        } 
+    } 
+
+    return '7'.$CheckByte.$HashStr; 
+} 
+
+//get google pagerank 
+function getpagerank($url) { 
+    $query="http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=".CheckHash(HashURL($url)). "&features=Rank&q=info:".$url."&num=100&filter=0"; 
+    $data=file_get_contents_curl($query); 
+    //print_r($data); 
+    $pos = strpos($data, "Rank_"); 
+    if($pos === false){} else{ 
+        $pagerank = substr($data, $pos + 9); 
+        return $pagerank; 
+    } 
+} 
+
+
+//get alexa popularity 
+function get_alexa_popularity($url) 
+{    
+global $alexa_backlink, $alexa_reach; 
+    $alexaxml = "http://xml.alexa.com/data?cli=10&dat=nsa&url=".$url; 
+    
+    $xml_parser = xml_parser_create(); 
+    /* 
+    $fp = fopen($alexaxml, "r") or die("Error: Reading XML data."); 
+    $data = ""; 
+    while (!feof($fp)) { 
+        $data .= fread($fp, 8192); 
+        //echo "masuk while<br />"; 
+    } 
+    fclose($fp); 
+    */ 
+    $data=file_get_contents_curl($alexaxml); 
+    xml_parse_into_struct($xml_parser, $data, $vals, $index); 
+    xml_parser_free($xml_parser); 
+    
+    //print_r($vals); 
+    //echo "<br />"; 
+    //print_r($index); 
+    
+    $index_popularity = $index['POPULARITY'][0]; 
+    $index_reach = $index['REACH'][0]; 
+    $index_linksin = $index['LINKSIN'][0]; 
+    //echo $index_popularity."<br />"; 
+    //print_r($vals[$index_popularity]); 
+    $alexarank = $vals[$index_popularity]['attributes']['TEXT']; 
+    $alexa_backlink = $vals[$index_linksin]['attributes']['NUM']; 
+    $alexa_reach = $vals[$index_reach]['attributes']['RANK']; 
+    
+    return $alexarank; 
+} 
+
+//get alexa backlink 
+function alexa_backlink($url) 
+{ 
+    global $alexa_backlink; 
+    if ($alexa_backlink!=0) 
+    { 
+        return $alexa_backlink; 
+    } else { 
+        $rank=get_alexa_popularity($url); 
+        return $alexa_backlink; 
+    } 
+} 
+
+//get alexa reach rank 
+function alexa_reach_rank($url) 
+{ 
+    global $alexa_reach; 
+    if ($alexa_reach!=0) 
+    { 
+        return $alexa_reach; 
+    } else { 
+        $rank=get_alexa_popularity($url); 
+        return $alexa_reach; 
+    } 
+} 
+
+
+
+
+function file_get_contents_curl($url) { 
+    $ch = curl_init(); 
+    curl_setopt($ch, CURLOPT_HEADER, 0); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser. 
+    curl_setopt($ch, CURLOPT_URL, $url); 
+    $data = curl_exec($ch); 
+    curl_close($ch); 
+
+    return $data; 
+}
+
+
+
+
+
+
+
+//get googlebot last access
+function googlebot_lastaccess($domain_name)
+{
+    $request = 'http://webcache.googleusercontent.com/search?hl=en&q=cache:'.$domain_name.'&btnG=Google+Search&meta=';
+    $data = getPageData($request);
+    $spl=explode("as it appeared on",$data);
+   //echo "<pre>".$spl[0]."</pre>";
+    $spl2=explode(".<br>",$spl[1]);
+    $value=trim($spl2[0]);
+   //echo "<pre>".$spl2[0]."</pre>";
+    if(strlen($value)==0)
+    {
+        return(0);
+    }
+    else
+    {
+        return($value);
+    }
+
+
+} 
+
+function getPageData($url) {
+ if(function_exists('curl_init')) {
+ $ch = curl_init($url); // initialize curl with given url
+ curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']); // add useragent
+ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // write the response to a variable
+ if((ini_get('open_basedir') == '') && (ini_get('safe_mode') == 'Off')) {
+ curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // follow redirects if any
+ }
+ curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); // max. seconds to execute
+ curl_setopt($ch, CURLOPT_FAILONERROR, 1); // stop when it encounters an error
+ return @curl_exec($ch);
+ }
+ else {
+ return @file_get_contents($url);
+ }
+}
+
 function wp_seo_rank_widget_admin_function() {
 	global $wpdb;
 	$data = get_option('wp_seo_rank');
@@ -12,80 +227,27 @@ function wp_seo_rank_widget_admin_function() {
 	$w3p_tracked_site = get_option('siteurl');
 	?>
 
-	<div>
-		<form method="POST">
-			<p>
-				FeedBurner username: <input name="wp_seo_rank_feedburner" type="text" value="<?php echo $data['feedburner']; ?>" /> 
-				<input name="wp_seo_rank_save" type="submit" class="button" value="Save Settings" />
-			</p>
-		</form>
-	</div>
+	<?php
+	$url = $w3p_tracked_site;
+	$content = googlebot_lastaccess($url);
+	$date = substr($content , 0, strpos($content, 'GMT') + strlen('GMT'));
 
-	<table class="widefat">
-		<thead>
-			<tr>
-				<th>Alexa Rank</th>
-				<th>Google PageRank</th>
-				<th>Google Backlinks</th>
-				<th>Yahoo Backlinks</th>
-				<th>Feedburner Subscribers</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><a target="_blank" href="http://www.alexa.com/siteinfo/<?php echo site_url();?>"><?php echo number_format(alexaRank($w3p_tracked_site));?></a></td>
-				<td><strong><?php echo getprSeo($w3p_tracked_site);?></strong></td>
-				<td><a target="_blank" href="http://www.google.com/search?oe=utf8&ie=utf8&source=uds&start=0&filter=0&hl=en&q=link:<?php echo site_url(); ?>"><?php echo number_format(get_backlinks_google(site_url())); ?></a></td>
-				<td><a target="_blank" href="http://siteexplorer.search.yahoo.com/search;_ylt=A0oG7zbdV5ZMIt8AdFddhMkF?p=<?php echo site_url(); ?>&y=Explore+URL&fr=sfp"><?php echo number_format(getYahooLinks(site_url())); ?></a></td>
-				<td><a target="_blank" href="http://feeds.feedburner.com/<?php echo $data['feedburner']; ?>"><?php echo number_format(getFeedBurner($data['feedburner'])); ?></a></td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="7"><small>Last update: <?php echo $data['ValLastUpdate'];?></small></td>
-			</tr>
-		</tfoot>
-	</table>
-		
-	<?
+	echo '<p>';
+		echo '<strong>'.$w3p_tracked_site.'</strong>';
+	echo '</p>';
+	echo '<p>';
+		echo 'Your site has a PageRank&trade; of <strong>'.getpagerank($url).'</strong>. Google bot last visited your site on <strong>'.$date.'</strong> and detected <a target="_blank" href="http://www.google.com/search?oe=utf8&ie=utf8&source=uds&start=0&filter=0&hl=en&q=link:'.site_url().'">'.number_format(get_backlinks_google(site_url())).'</a> backlinks.<br />';
+		echo 'Your site is ranked <strong><a target="_blank" href="http://www.alexa.com/siteinfo/'.$url.'">'.get_alexa_popularity($url).'</a></strong> in Alexa and has <strong>'.alexa_backlink($url).'</strong> backlinks <em>(based on Alexa)</em>.';
+	echo '</p>';
+	echo '<p>';
+		echo 'Google Feedburner has <a target="_blank" href="http://feeds.feedburner.com/'.get_option('w3p_feedburner').'">'.number_format(getFeedBurner(get_option('w3p_feedburner'))).'</a> subscribers.';
+	echo '</p>';
 }
 
-/*************************
- * SEO FUNCTIONS/ALGORYTHMS
- *************************/
-function alexaRank($domain) {
-	$remote_url = 'http://data.alexa.com/data?cli=10&dat=snbamz&url='.trim($domain);
-	$search_for = '<POPULARITY URL';
-	if($handle = @fopen($remote_url, "r")) {
-		while(!feof($handle)) {
-			$part .= fread($handle, 100);
-			$pos = strpos($part, $search_for);
-			if($pos === false)
-				continue;
-			else
-				break;
-		}
-		$part .= fread($handle, 100);
-		fclose($handle);
-	}
-	$str = explode($search_for, $part);
-	$str = array_shift(explode('"/>', $str[1]));
-	$str = explode('TEXT="', $str);
-
-	return $str[1];
-}
 function get_backlinks_google($url) {
 	$content = file_get_contents('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&filter=0&key=ABQIAAAA6f5Achoodo5s2Q2049vn6BSIkO30j4gnxwlOBxQkFXOonq3PsBQ0hUYBhAxwx8DYL03zbFQWDSv_nA&q=link:'.urlencode($url));
 	$data = json_decode($content);
 	return intval($data->responseData->cursor->estimatedResultCount);
-}
-function getYahooLinks($dominio) {
-	$appid = "31245124213";
-	$feed = 'http://search.yahooapis.com/SiteExplorerService/V1/inlinkData?appid='.$appid."&query=$dominio&entire_site=1&omit_inlinks=domain";
-	$contenido = @file_get_contents($feed);
-	preg_match('/totalResultsAvailable=("(.*)"?)/', $contenido, $treffer);
-	$total = str_replace('"','',$treffer[1]);
-	return $total;
 }
 function getFeedBurner($user) {
 	$xml = file_get_contents("https://feedburner.google.com/api/awareness/1.0/GetFeedData?uri=http://feeds.feedburner.com/$user");
@@ -95,117 +257,7 @@ function get_match($regex,$content) {
 	preg_match($regex,$content,$matches);
 	return $matches[1];
 }
-function getprSeo($url){
-	$dc = 'http://toolbarqueries.google.com';
-	$gpr = new GooglePageRank(trim($url));
-	$pagerank = $gpr->getPageRank($dc);
-	return $pagerank;
-}
 
-add_action('wp_login', 'update_seo');
-
-/******************************
- * PAGERANK CLASS
- * ****************************/
-class GooglePageRank {
-	var $_GOOGLE_MAGIC = 0xE6359A60;
-	var $_url = '';
-	var $_checksum = '';
-
-	function GooglePageRank($url) {
-		$this->_url = $url;
-	}
-	function _strToNum($Str, $Check, $Magic) {
-		$Int32Unit = 4294967296;
-
-		$length = strlen($Str);
-		for ($i = 0; $i < $length; $i++) {
-			$Check *= $Magic;    
-
-			if ($Check >= $Int32Unit) {
-				$Check = ($Check - $Int32Unit * (int) ($Check / $Int32Unit));
-				$Check = ($Check < -2147483647) ? ($Check + $Int32Unit) : $Check;
-			}
-			$Check += ord($Str{$i});
-		}
-		return $Check;
-	}
-
-	function _hashURL($String) {
-		$Check1 = $this->_strToNum($String, 0x1505, 0x21);
-		$Check2 = $this->_strToNum($String, 0, 0x1003F);
-
-		$Check1 >>= 2;
-		$Check1 = (($Check1 >> 4) & 0x3FFFFC0 ) | ($Check1 & 0x3F);
-		$Check1 = (($Check1 >> 4) & 0x3FFC00 ) | ($Check1 & 0x3FF);
-		$Check1 = (($Check1 >> 4) & 0x3C000 ) | ($Check1 & 0x3FFF);   
-
-		$T1 = (((($Check1 & 0x3C0) << 4) | ($Check1 & 0x3C)) <<2 ) | ($Check2 & 0xF0F );
-		$T2 = (((($Check1 & 0xFFFFC000) << 4) | ($Check1 & 0x3C00)) << 0xA) | ($Check2 & 0xF0F0000 );
-
-		return ($T1 | $T2);
-	}
-
-	function checksum() {
-		if($this->_checksum != '') return $this->_checksum;
-
-		$Hashnum = $this->_hashURL($this->_url);
-
-		$CheckByte = 0;
-		$Flag = 0;
-
-		$HashStr = sprintf('%u', $Hashnum) ;
-		$length = strlen($HashStr);
-
-		for ($i = $length - 1;  $i >= 0;  $i --) {
-			$Re = $HashStr{$i};
-			if (1 == ($Flag % 2)) {
-				$Re += $Re;
-				$Re = (int)($Re / 10) + ($Re % 10);
-			}
-			$CheckByte += $Re;
-			$Flag ++;
-		}
-
-		$CheckByte %= 10;
-		if(0 !== $CheckByte) {
-			$CheckByte = 10 - $CheckByte;
-			if(1 === ($Flag%2) ) {
-				if(1 === ($CheckByte % 2)) {
-					$CheckByte += 9;
-				}
-				$CheckByte >>= 1;
-			}
-		}
-
-		$this->_checksum = '7'.$CheckByte.$HashStr;
-		return $this->_checksum;
-	}
-	function pageRankUrl($dcchosen) {
-		return $dcchosen.'/tbr?client=navclient-auto&features=Rank:&q=info:'.$this->_url.'&ch='.$this->checksum();
-	}
-	function getPageRank($dcchosen) {
-		$fh = @fopen($this->pageRankUrl($dcchosen), "r");
-		if($fh) {
-			$contenido = '';
-			while(!feof($fh)) {
-			  $contenido .= fread($fh, 8192);
-			}
-			fclose($fh);
-			ltrim($contenido);
-			rtrim($contenido);
-			$contenido=str_replace("Rank_1:1:","",$contenido);
-			$contenido=str_replace("Rank_1:2:","",$contenido);
-			$contenido=intval($contenido);
-			
-			if(is_numeric($contenido))
-				return $contenido;
-			else
-				return -2;
-		}
-		return -1;
-	}
-}
 
 // SEO TRACKER PAGE FUNCTION
 function w3p_seo_options() {

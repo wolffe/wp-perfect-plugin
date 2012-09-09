@@ -4,7 +4,7 @@ Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
 Requires at least: 3.1
 Tested up to: 3.4.1
-Stable tag: 0.1.5
+Stable tag: 0.1.5.1
 
 == Description ==
 
@@ -17,6 +17,11 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.5.1 =
+* Added option to enable/disable analytics module
+* Consolidated the SEO tracker
+* Merged several options scattered throughout the plugin
 
 = 0.1.5 =
 * Merged with SEO Love plugin
