@@ -12,10 +12,10 @@ function mapme($attr) {
 		'lat'   => '0', 
 		'lon'    => '0',
 		'id' => 'map',
-		'z' => '8',
-		'w' => '400',
+		'z' => '15',
+		'w' => '100%',
 		'h' => '300',
-		'maptype' => 'ROADMAP',
+		'maptype' => 'TERRAIN',
 		'address' => '',
 		'kml' => '',
 		'marker' => '',
@@ -26,8 +26,8 @@ function mapme($attr) {
 
 	//add_action('wp_head', 'gmaps_header');
 	$returnme = '
-		<div class="w3p-google-maps" id="' .$attr['id'] . '" style="width:' . $attr['w'] . 'px;height:' . $attr['h'] . 'px;border:1px solid gray;"></div><br />
-		<script type="text/javascript">
+		<div class="w3p-google-maps" id="' .$attr['id'] . '" style="width:' . $attr['w'] . '; height:' . $attr['h'] . 'px;"></div>
+		<script>
 		var latlng = new google.maps.LatLng(' . $attr['lat'] . ', ' . $attr['lon'] . ');
 		var myOptions = {
 			zoom: ' . $attr['z'] . ',
@@ -36,8 +36,7 @@ function mapme($attr) {
 			streetViewControl: false
 		};
 		var ' . $attr['id'] . ' = new google.maps.Map(document.getElementById("' . $attr['id'] . '"),
-		myOptions);
-		';
+		myOptions);';
 
 		//kml
 		if($attr['kml'] != '') {
@@ -45,16 +44,14 @@ function mapme($attr) {
 			$thiskml = str_replace("&#038;","&",$attr['kml']);		
 			$returnme .= '
 			var kmllayer = new google.maps.KmlLayer(\''.$thiskml.'\');
-			kmllayer.setMap('.$attr['id'].');
-			';
+			kmllayer.setMap('.$attr['id'].');';
 		}
 
 		//traffic
 		if($attr['traffic'] == 'yes') {
 			$returnme .= '
 			var trafficLayer = new google.maps.TrafficLayer();
-			trafficLayer.setMap('.$attr['id'].');
-			';
+			trafficLayer.setMap('.$attr['id'].');';
 		}
 
 		//address
@@ -64,8 +61,7 @@ function mapme($attr) {
 			var address = \''.$attr['address'].'\';
 			geocoder_'.$attr['id'].'.geocode({ \'address\': address}, function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
-					'.$attr['id'].'.setCenter(results[0].geometry.location);
-					';
+					'.$attr['id'].'.setCenter(results[0].geometry.location);';
 
 					if($attr['marker'] !='') {
 						//add custom image
@@ -74,16 +70,14 @@ function mapme($attr) {
 						}
 						$returnme .= '
 						var marker = new google.maps.Marker({
-							map: ' . $attr['id'] . ', 
-							';
+							map: ' . $attr['id'] . ', ';
 							if ($attr['markerimage'] !='')
 							{
 								$returnme .= 'icon: image,';
 							}
 						$returnme .= '
 							position: ' . $attr['id'] . '.getCenter()
-						});
-						';
+						});';
 
 						//infowindow
 						if($attr['infowindow'] != '') {
@@ -97,16 +91,14 @@ function mapme($attr) {
 										
 							google.maps.event.addListener(marker, \'click\', function() {
 							  infowindow.open(' . $attr['id'] . ',marker);
-							});
-							';
+							});';
 						}
 					}
 			$returnme .= '
 				} else {
 				alert("Geocode was not successful for the following reason: " + status);
 			}
-			});
-			';
+			});';
 		}
 
 		//marker: show if address is not specified
@@ -118,15 +110,13 @@ function mapme($attr) {
 
 			$returnme .= '
 				var marker = new google.maps.Marker({
-				map: ' . $attr['id'] . ', 
-				';
+				map: ' . $attr['id'] . ', ';
 				if ($attr['markerimage'] !='') {
 					$returnme .= 'icon: image,';
 				}
 			$returnme .= '
 				position: ' . $attr['id'] . '.getCenter()
-			});
-			';
+			});';
 
 			//infowindow
 			if($attr['infowindow'] != '') {
@@ -140,8 +130,7 @@ function mapme($attr) {
 				google.maps.event.addListener(marker, \'click\', function() {
 				  infowindow.open(' . $attr['id'] . ',marker);
 				});
-				infowindow.open(map1,marker);
-				';
+				infowindow.open(map1,marker);';
 			}
 		}
 

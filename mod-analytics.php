@@ -1,13 +1,4 @@
 <?php
-if (!defined('WPSA_PLUGIN_NAME'))
-	define('WPSA_PLUGIN_NAME', trim(dirname(plugin_basename(__FILE__)), '/'));
-
-if (!defined('WPSA_PLUGIN_DIR'))
-    define('WPSA_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . WPSA_PLUGIN_NAME);
-
-if (!defined('WPSA_PLUGIN_URL'))
-    define('WPSA_PLUGIN_URL', WP_PLUGIN_URL . '/' . WPSA_PLUGIN_NAME);
-
 if(isset($_GET['wpsa_action'])) {
 	$iriAction = mysql_real_escape_string($_GET['wpsa_action']);
 }
@@ -111,8 +102,8 @@ function iriwpsaMain() {
 	echo '
 	<div class="wrap">
 		<div id="icon-options-general" class="icon32"></div>
-		<h2>' . __('W3P Analytics', 'wpsa') . '</h2>
-		<p>Welcome to <strong>W3P Analytics</strong>! The dashboard shows you a general overview, last hits, search terms, referrers, agents and spiders. Check the individual pages for more statistics.</p>';
+		<h2>' . __('W3P Analytics', 'w3p') . '</h2>
+		<p>Welcome to <strong>W3P Analytics</strong>! The dashboard shows you a general overview, last hits, search terms, referrers, agents and spiders.</p>';
 
 	echo "
 	<table class='widefat'>
@@ -425,7 +416,7 @@ function iriwpsaMain() {
           {
               $gdays = 20;
           }
-          //  $start_of_week = get_settings('start_of_week');
+          //  $start_of_week = get_option('start_of_week');
           $start_of_week = get_option('start_of_week');
           print '<table width="100%" border="0"><tr>';
           $qry = $wpdb->get_row("
@@ -905,25 +896,6 @@ function iriValueTable($fld, $fldtitle, $limit = 0, $param = "", $queryfld = "",
           return '';
       }
       
-	  function iriCheckBanIP($arg)
-      {
-          if (file_exists(ABSPATH . 'wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . '-custom/banips.dat'))
-              $lines = file(ABSPATH . 'wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . '-custom/banips.dat');
-          else
-              $lines = file(ABSPATH . 'wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . '/definitions/banips.dat');
-         
-        if ($lines !== false)
-        {
-            foreach ($lines as $banip)
-              {
-               if (@preg_match('/^' . rtrim($banip, "\r\n") . '$/', $arg)){
-                   return true;
-               }
-                  // riconosciuto, da scartare
-              }
-          }
-          return false;
-      }
       
       function iriGetSE($referrer = null)
       {
@@ -1054,121 +1026,88 @@ function iri_wpsa_extractfeedreq($url)
     
     return $res;
 }
-      
-      function iriStatAppend()
-      {
-          global $wpdb;
-          $table_name = $wpdb->prefix . "wpsa";
-          global $userdata;
-          global $_WPSA;
-          get_currentuserinfo();
-          $feed = '';
-          
-          // Time
-          $timestamp = current_time('timestamp');
-          $vdate = gmdate("Ymd", $timestamp);
-          $vtime = gmdate("H:i:s", $timestamp);
-          
-          // IP
-          $ipAddress = $_SERVER['REMOTE_ADDR'];
-          if (iriCheckBanIP($ipAddress) === true)
-          {
-              return '';
-          }
-          
-          // Determine Threats if http:bl installed
-          $threat_score = 0;
-          $threat_type = 0;
-          $httpbl_key = get_option("httpbl_key");
-          if ($httpbl_key !== false)
-          {
-              $result = explode( ".", gethostbyname( $httpbl_key . "." .
-                  implode ( ".", array_reverse( explode( ".",
-                  $ipAddress ) ) ) .
-                  ".dnsbl.httpbl.org" ) );
-              // If the response is positive
-              if ($result[0] == 127)
-              {
-                  $threat_score = $result[2];
-                  $threat_type = $result[3];
-              }
-          }
-          
-          // URL (requested)
-          $urlRequested = iri_wpsa_URL();
-          if (eregi(".ico$", $urlRequested))
-          {
-              return '';
-          }
-          if (eregi("favicon.ico", $urlRequested))
-          {
-              return '';
-          }
-          if (eregi(".css$", $urlRequested))
-          {
-              return '';
-          }
-          if (eregi(".js$", $urlRequested))
-          {
-              return '';
-          }
-          if (stristr($urlRequested, "/wp-content/plugins") != false)
-          {
-              return '';
-          }
-          if (stristr($urlRequested, "/wp-content/themes") != false)
-          {
-              return '';
-          }
-          
-          $referrer = (isset($_SERVER['HTTP_REFERER']) ? htmlentities($_SERVER['HTTP_REFERER']) : '');
-          $userAgent = (isset($_SERVER['HTTP_USER_AGENT']) ? htmlentities($_SERVER['HTTP_USER_AGENT']) : '');
-          $spider = iriGetSpider($userAgent);
-          
-          if (($spider != '') and (get_option('wpsa_donotcollectspider') == 'checked'))
-          {
-              return '';
-          }
-          
-          if ($spider != '')
-          {
-              $os = '';
-              $browser = '';
-          }
-          else
-          {
-              // Trap feeds
-              $prsurl = parse_url(get_bloginfo('url'));
-              $feed = iri_wpsa_is_feed($prsurl['scheme'] . '://' . $prsurl['host'] . $_SERVER['REQUEST_URI']);
-              // Get OS and browser
-              $os = iriGetOS($userAgent);
-              $browser = iriGetBrowser($userAgent);
-              list($searchengine, $search_phrase) = explode("|", iriGetSE($referrer));
-          }
-          // Auto-delete visits if...
-          if (get_option('wpsa_autodelete_spider') != '') 
-          {
-              $t = gmdate("Ymd", strtotime('-' . get_option('wpsa_autodelete_spider')));
-              $results = $wpdb->query("DELETE FROM " . $table_name . " WHERE date < '" . $t . "' AND spider <> ''");
-          }
-          if (get_option('wpsa_autodelete') != '')
-          {
-              $t = gmdate("Ymd", strtotime('-' . get_option('wpsa_autodelete')));
-              $results = $wpdb->query("DELETE FROM " . $table_name . " WHERE date < '" . $t . "'");
-          }
-          if ((!is_user_logged_in()) or (get_option('wpsa_collectloggeduser') == 'checked'))
-          {
-              if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name)
-              {
-                  iri_wpsa_CreateTable();
-              }
-              
-              $insert = "INSERT INTO " . $table_name . " (date, time, ip, urlrequested, agent, referrer, search,nation,os,browser,searchengine,spider,feed,user,threat_score,threat_type,timestamp) " . "VALUES ('$vdate','$vtime','$ipAddress','" . mysql_real_escape_string($urlRequested) . "','" . mysql_real_escape_string(strip_tags($userAgent)) . "','" . mysql_real_escape_string($referrer) . "','" . mysql_real_escape_string(strip_tags($search_phrase)) . "','" . iriDomain($ipAddress) . "','" . mysql_real_escape_string($os) . "','" . mysql_real_escape_string($browser) . "','$searchengine','$spider','$feed','$userdata->user_login',$threat_score,$threat_type,'$timestamp')";
-              $results = $wpdb->query($insert);
-          }
-      }
-      
-      
+
+function iriStatAppend() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'wpsa';
+	global $userdata;
+	get_currentuserinfo();
+	$feed = '';
+
+	// Time
+	$timestamp = current_time('timestamp');
+	$vdate = gmdate("Ymd", $timestamp);
+	$vtime = gmdate("H:i:s", $timestamp);
+
+	// IP
+	$ipAddress = $_SERVER['REMOTE_ADDR'];
+
+	// Determine Threats if http:bl installed
+	$threat_score = 0;
+	$threat_type = 0;
+	$httpbl_key = get_option("httpbl_key");
+	if($httpbl_key !== false) {
+		$result = explode( ".", gethostbyname( $httpbl_key . "." . implode ( ".", array_reverse( explode( ".", $ipAddress ) ) ) . ".dnsbl.httpbl.org" ) );
+		// If the response is positive
+		if($result[0] == 127) {
+			$threat_score = $result[2];
+			$threat_type = $result[3];
+		}
+	}
+
+	// URL (requested)
+	$urlRequested = iri_wpsa_URL();
+	if(eregi(".ico$", $urlRequested))
+		return '';
+	if(eregi("favicon.ico", $urlRequested))
+		return '';
+	if(eregi(".css$", $urlRequested))
+		return '';
+	if(eregi(".js$", $urlRequested))
+		return '';
+	if(stristr($urlRequested, "/wp-content/plugins") != false)
+		return '';
+	if(stristr($urlRequested, "/wp-content/themes") != false)
+		return '';
+
+	$referrer = (isset($_SERVER['HTTP_REFERER']) ? htmlentities($_SERVER['HTTP_REFERER']) : '');
+	$userAgent = (isset($_SERVER['HTTP_USER_AGENT']) ? htmlentities($_SERVER['HTTP_USER_AGENT']) : '');
+	$spider = iriGetSpider($userAgent);
+
+	if(($spider != '') and (get_option('wpsa_donotcollectspider') == 'checked'))
+		return '';
+
+	if($spider != '') {
+		$os = '';
+		$browser = '';
+	}
+	else {
+		// Trap feeds
+		$prsurl = parse_url(get_bloginfo('url'));
+		$feed = iri_wpsa_is_feed($prsurl['scheme'] . '://' . $prsurl['host'] . $_SERVER['REQUEST_URI']);
+		// Get OS and browser
+		$os = iriGetOS($userAgent);
+		$browser = iriGetBrowser($userAgent);
+		list($searchengine, $search_phrase) = explode("|", iriGetSE($referrer));
+	}
+	// Auto-delete visits if...
+	if(get_option('wpsa_autodelete_spider') != '') {
+		$t = gmdate("Ymd", strtotime('-' . get_option('wpsa_autodelete_spider')));
+		$results = $wpdb->query("DELETE FROM " . $table_name . " WHERE date < '" . $t . "' AND spider <> ''");
+	}
+	if(get_option('wpsa_autodelete') != '') {
+		$t = gmdate("Ymd", strtotime('-' . get_option('wpsa_autodelete')));
+		$results = $wpdb->query("DELETE FROM " . $table_name . " WHERE date < '" . $t . "'");
+	}
+	if((!is_user_logged_in()) or (get_option('wpsa_collectloggeduser') == 'checked')) {
+		if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name)
+			iri_wpsa_CreateTable();
+
+		$insert = "INSERT INTO " . $table_name . " (date, time, ip, urlrequested, agent, referrer, search,nation,os,browser,searchengine,spider,feed,user,threat_score,threat_type,timestamp) " . "VALUES ('$vdate','$vtime','$ipAddress','" . mysql_real_escape_string($urlRequested) . "','" . mysql_real_escape_string(strip_tags($userAgent)) . "','" . mysql_real_escape_string($referrer) . "','" . mysql_real_escape_string(strip_tags($search_phrase)) . "','" . iriDomain($ipAddress) . "','" . mysql_real_escape_string($os) . "','" . mysql_real_escape_string($browser) . "','$searchengine','$spider','$feed','$userdata->user_login',$threat_score,$threat_type,'$timestamp')";
+		$results = $wpdb->query($insert);
+	}
+}
+
 function iriwpsaUpdate() {
 	echo '<p>This function will synchronize the .dat files (OSs, browsers, spiders and IPs) with the database. It is requested on plugin updates.</p>'; // CHIP
 
@@ -1415,106 +1354,89 @@ function iriwpsaUpdate() {
           return "$res</ul>\n";
       }
       
-      
-      function widget_wpsa_init($args)
-      {
-          if (!function_exists('register_sidebar_widget') || !function_exists('register_widget_control'))
-              return;
-          // Multifunctional wpsa pluging
-          function widget_wpsa_control()
-          {
-              $options = get_option('widget_wpsa');
-              if (!is_array($options))
-                  $options = array('title' => 'wpsa', 'body' => 'Visits today: %visits%');
-              if ($_POST['wpsa-submit'])
-              {
-                  $options['title'] = strip_tags(stripslashes($_POST['wpsa-title']));
-                  $options['body'] = stripslashes($_POST['wpsa-body']);
-                  update_option('widget_wpsa', $options);
-              }
-              $title = htmlspecialchars($options['title'], ENT_QUOTES);
-              $body = htmlspecialchars($options['body'], ENT_QUOTES);
-              // the form
-              echo '<p style="text-align:right;"><label for="wpsa-title">' . __('Title:') . ' <input style="width: 250px;" id="wpsa-title" name="wpsa-title" type="text" value="' . $title . '" /></label></p>';
-              echo '<p style="text-align:right;"><label for="wpsa-body"><div>' . __('Body:', 'widgets') . '</div><textarea style="width: 288px;height:100px;" id="wpsa-body" name="wpsa-body" type="textarea">' . $body . '</textarea></label></p>';
-              echo '<input type="hidden" id="wpsa-submit" name="wpsa-submit" value="1" /><div style="font-size:7pt;">%totalvisits% %visits% %thistotalvisits% %os% %browser% %ip% %since% %visitorsonline% %usersonline% %toppost% %topbrowser% %topos%</div>';
-          }
-          function widget_wpsa($args)
-          {
-              extract($args);
-              $options = get_option('widget_wpsa');
-              $title = $options['title'];
-              $body = $options['body'];
-              echo $before_widget;
-              print($before_title . $title . $after_title);
-              print iri_wpsa_Vars($body);
-              echo $after_widget;
-          }
-          register_sidebar_widget('wpsa', 'widget_wpsa');
-          register_widget_control(array('wpsa', 'widgets'), 'widget_wpsa_control', 300, 210);
-          
-          // Top posts
-          function widget_wpsatopposts_control()
-          {
-              $options = get_option('widget_wpsatopposts');
-              if (!is_array($options))
-              {
-                  $options = array('title' => 'wpsa TopPosts', 'howmany' => '5', 'showcounts' => 'checked');
-              }
-              if ($_POST['wpsatopposts-submit'])
-              {
-                  $options['title'] = strip_tags(stripslashes($_POST['wpsatopposts-title']));
-                  $options['howmany'] = stripslashes($_POST['wpsatopposts-howmany']);
-                  $options['showcounts'] = stripslashes($_POST['wpsatopposts-showcounts']);
-                  if ($options['showcounts'] == "1")
-                  {
-                      $options['showcounts'] = 'checked';
-                  }
-                  update_option('widget_wpsatopposts', $options);
-              }
-              $title = htmlspecialchars($options['title'], ENT_QUOTES);
-              $howmany = htmlspecialchars($options['howmany'], ENT_QUOTES);
-              $showcounts = htmlspecialchars($options['showcounts'], ENT_QUOTES);
-              // the form
-              echo '<p style="text-align:right;"><label for="wpsatopposts-title">' . __('Title', 'wpsa') . ' <input style="width: 250px;" id="wpsa-title" name="wpsatopposts-title" type="text" value="' . $title . '" /></label></p>';
-              echo '<p style="text-align:right;"><label for="wpsatopposts-howmany">' . __('Limit results to', 'wpsa') . ' <input style="width: 100px;" id="wpsatopposts-howmany" name="wpsatopposts-howmany" type="text" value="' . $howmany . '" /></label></p>';
-              echo '<p style="text-align:right;"><label for="wpsatopposts-showcounts">' . __('Visits', 'wpsa') . ' <input id="wpsatopposts-showcounts" name="wpsatopposts-showcounts" type=checkbox value="checked" ' . $showcounts . ' /></label></p>';
-              echo '<input type="hidden" id="wpsa-submitTopPosts" name="wpsatopposts-submit" value="1" />';
-          }
-          function widget_wpsatopposts($args)
-          {
-              extract($args);
-              $options = get_option('widget_wpsatopposts');
-              $title = htmlspecialchars($options['title'], ENT_QUOTES);
-              $howmany = htmlspecialchars($options['howmany'], ENT_QUOTES);
-              $showcounts = htmlspecialchars($options['showcounts'], ENT_QUOTES);
-              echo $before_widget;
-              print($before_title . $title . $after_title);
-              print iri_wpsa_TopPosts($howmany, $showcounts);
-              echo $after_widget;
-          }
-          register_sidebar_widget('wpsa TopPosts', 'widget_wpsatopposts');
-          register_widget_control(array('wpsa TopPosts', 'widgets'), 'widget_wpsatopposts_control', 300, 110);
-      }
-      
-      
-		// a custom function for loading localization
-		function wpsa_load_textdomain() {
-		//check whether necessary core function exists
-		if ( function_exists('load_plugin_textdomain') ) {
-		//load the plugin textdomain
-		load_plugin_textdomain('wpsa', 'wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . '/locale');
+function widget_wpsa_init($args) {
+	function widget_wpsa_control() {
+		$options = get_option('widget_wpsa');
+		if(!is_array($options))
+			$options = array('title' => 'wpsa', 'body' => 'Visits today: %visits%');
+		if($_POST['wpsa-submit']) {
+			$options['title'] = strip_tags(stripslashes($_POST['wpsa-title']));
+			$options['body'] = stripslashes($_POST['wpsa-body']);
+			update_option('widget_wpsa', $options);
 		}
+		$title = htmlspecialchars($options['title'], ENT_QUOTES);
+		$body = htmlspecialchars($options['body'], ENT_QUOTES);
+
+		echo '<p><label for="wpsa-title">' . __('Title:', 'w3p') . '</label><br><input id="wpsa-title" name="wpsa-title" type="text" value="' . $title . '" class="large-text"></p>';
+		echo '<p><label for="wpsa-body">' . __('Body:', 'w3p') . '</label><br><textarea id="wpsa-body" name="wpsa-body" type="textarea" class="large-text">' . $body . '</textarea></p>';
+		echo '<p><input type="hidden" id="wpsa-submit" name="wpsa-submit" value="1" /><small>%totalvisits% %visits% %thistotalvisits% %os% %browser% %ip% %since% %visitorsonline% %usersonline% %toppost% %topbrowser% %topos%</small></p>';
+	}
+	function widget_wpsa($args) {
+		extract($args);
+		$options = get_option('widget_wpsa');
+		$title = $options['title'];
+		$body = $options['body'];
+		echo $before_widget;
+		print($before_title . $title . $after_title);
+		print iri_wpsa_Vars($body);
+		echo $after_widget;
+	}
+
+	wp_register_sidebar_widget(
+		'wpsa',
+		'W3P Analytics',
+		'widget_wpsa',
+		array(
+			'description' => 'Real time statistics of your site.'
+		)
+	);
+	wp_register_widget_control('wpsa', array('wpsa', 'widgets'), 'widget_wpsa_control');
+
+	// Top posts
+	function widget_wpsatopposts_control() {
+		$options = get_option('widget_wpsatopposts');
+		if(!is_array($options))
+			$options = array('title' => 'wpsa TopPosts', 'howmany' => '5', 'showcounts' => 'checked');
+
+		if($_POST['wpsatopposts-submit']) {
+			$options['title'] = strip_tags(stripslashes($_POST['wpsatopposts-title']));
+			$options['howmany'] = stripslashes($_POST['wpsatopposts-howmany']);
+			$options['showcounts'] = stripslashes($_POST['wpsatopposts-showcounts']);
+			if($options['showcounts'] == "1")
+				$options['showcounts'] = 'checked';
+
+			update_option('widget_wpsatopposts', $options);
 		}
-		// call the custom function on the init hook
-		add_action('init', 'wpsa_load_textdomain');
-      
-      add_action('admin_menu', 'iri_add_pages');
-      add_action('plugins_loaded', 'widget_wpsa_init');
-      //add_action('wp_head', 'iriStatAppend');
-      add_action('send_headers', 'iriStatAppend');
-      
-      register_activation_hook(__FILE__, 'iri_wpsa_CreateTable');
-// line 1696
-	  // line 2144
+
+		$title = htmlspecialchars($options['title'], ENT_QUOTES);
+		$howmany = htmlspecialchars($options['howmany'], ENT_QUOTES);
+		$showcounts = htmlspecialchars($options['showcounts'], ENT_QUOTES);
+
+		echo '<p><label for="wpsatopposts-title">' . __('Title', 'w3p') . '</label><br><input id="wpsa-title" name="wpsatopposts-title" type="text" value="' . $title . '"></p>';
+		echo '<p><label for="wpsatopposts-howmany">' . __('Limit Results To', 'w3p') . ' <input id="wpsatopposts-howmany" name="wpsatopposts-howmany" type="number" min="1" max="50" value="' . $howmany . '"></label></p>';
+		echo '<p><label for="wpsatopposts-showcounts">' . __('Visits', 'w3p') . ' <input id="wpsatopposts-showcounts" name="wpsatopposts-showcounts" type="checkbox" value="checked" ' . $showcounts . '></label></p>';
+		echo '<input type="hidden" id="wpsa-submitTopPosts" name="wpsatopposts-submit" value="1">';
+	}
+	function widget_wpsatopposts($args) {
+		extract($args);
+		$options = get_option('widget_wpsatopposts');
+		$title = htmlspecialchars($options['title'], ENT_QUOTES);
+		$howmany = htmlspecialchars($options['howmany'], ENT_QUOTES);
+		$showcounts = htmlspecialchars($options['showcounts'], ENT_QUOTES);
+		echo $before_widget;
+		print($before_title . $title . $after_title);
+		print iri_wpsa_TopPosts($howmany, $showcounts);
+		echo $after_widget;
+	}
+
+	wp_register_sidebar_widget('wpsatp', 'W3P Top Posts', 'widget_wpsatopposts');
+	wp_register_widget_control('wpsatp', array('wpsa TopPosts', 'widgets'), 'widget_wpsatopposts_control');
+}
+
+add_action('admin_menu', 'iri_add_pages');
+add_action('plugins_loaded', 'widget_wpsa_init');
+//add_action('wp_head', 'iriStatAppend');
+add_action('send_headers', 'iriStatAppend');
+
+register_activation_hook(__FILE__, 'iri_wpsa_CreateTable');
 ?>

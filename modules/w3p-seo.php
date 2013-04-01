@@ -219,7 +219,7 @@ function wp_seo_rank_widget_admin_function() {
 	$data = get_option('wp_seo_rank');
 
 	if(isset($_POST['wp_seo_rank_save'])) {
-		$data['feedburner'] = attribute_escape($_POST['wp_seo_rank_feedburner']);
+		$data['feedburner'] = esc_attr($_POST['wp_seo_rank_feedburner']);
 		$data['ValLastUpdate'] = date('Y-m-d');
 		update_option('wp_seo_rank', $data);
 	}

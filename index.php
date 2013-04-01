@@ -5,10 +5,10 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.5.1
+Version: 0.1.5.2
 
 WordPress Perfect Plugin
-Copyright (C) 2010, 2011, 2012 Ciprian Popescu (getbutterfly@gmail.com)
+Copyright (C) 2010, 2011, 2012, 2013 Ciprian Popescu (getbutterfly@gmail.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,21 +24,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//error_reporting(0); // Used for debug
-
 //
-define('W3P_PLUGIN_URL', WP_PLUGIN_URL.'/'.dirname(plugin_basename(__FILE__)));
-define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__)));
-define('W3P_VERSION', '0.1.5.1');
+define('W3P_PLUGIN_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
+define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
+define('W3P_VERSION', '0.1.5.2');
 //
 
 // plugin localization
 $plugin_dir = basename(dirname(__FILE__)); 
-load_plugin_textdomain('w3p', false, $plugin_dir.'/languages'); 
+load_plugin_textdomain('w3p', false, $plugin_dir . '/languages'); 
 //
 
 // Begin Code
-add_option('w3p_email', '', '', 'no');
+add_option('w3p_email', '');
 
 function w3p_plugin_menu() {
 	add_menu_page('Perfect Plugin', 'Perfect Plugin', 'manage_options', 'w3p', 'w3p_plugin_main', W3P_PLUGIN_URL.'/images/icon-16.png');
@@ -70,19 +68,50 @@ function w3p_plugin_main() {
 	?>
 	<div class="wrap">
 		<div id="icon-options-general" class="icon32"></div>
-		<h2>Perfect Plugin Settings</h2>
-		<?php include('includes/sidebar.php');?>
-		<p>Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
+		<h2>Perfect Plugin (W3P)</h2>
+		<div id="poststuff" class="ui-sortable meta-box-sortables">
+			<div class="postbox">
+				<h3>About Perfect Plugin (W3P) <small>(<a href="http://getbutterfly.com/" rel="external">official web site</a>)</small></h3>
+				<div class="inside">
+					<p><small>You are using Perfect Plugin version <strong><?php echo W3P_VERSION; ?></strong>.</small></p>
+					<p>
+						<?php _e('Related Sites:', 'w3p'); ?> 
+						<a href="http://getbutterfly.com/">getButterfly</a> | 
+						<a href="http://roo.ie/">Roo.ie</a> | 
+						<a href="http://www.demain.ie/">Demain Technologies</a> | 
+						<a href="http://browsehappy.com/">Browse Happy</a> <small>:) Upgrade your browser today!</small>
+					</p>
+					<p>
+						<?php _e('By the Same Author:', 'w3p'); ?> 
+						<a href="http://getbutterfly.com/wordpress-plugins/portable-phpmyadmin/">Portable phpMyAdmin</a> <small class="tag-free">Free</small> | 
+						<a href="http://getbutterfly.com/wordpress-plugins/smartbackup/">Smart Backup</a> <small class="tag-premium">Commercial</small> | 
+						<a href="http://getbutterfly.com/wordpress-plugins/"><small>Even More WordPress Plugins</small></a>
+					</p>
+				</div>
+			</div>
+		</div>
 
-		<img src="<?php echo W3P_PLUGIN_URL;?>/images/icon-32.png" alt="" />
-		<h3>Current Modules</h3>
+		<div id="poststuff" class="ui-sortable meta-box-sortables">
+			<div class="postbox">
+				<h3>What is W3P?</h3>
+				<div class="inside">
+					<img src="<?php echo W3P_PLUGIN_URL; ?>/images/icon-32.png" alt="" class="alignright">
+					<p>Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
+				</div>
+			</div>
+		</div>
+
+		<div id="poststuff" class="ui-sortable meta-box-sortables">
+			<div class="postbox">
+				<h3>Available Modules</h3>
+				<div class="inside">
 		<ul>
 			<li><strong>Custom Login</strong> - Show a little love and show a modified WordPress logo with a &quot;Powered by Perfect Plugin&quot; tag in the login page (<code>wp-login.php</code>).</li>
 			<li><strong>Google Feedburner</strong> - This module redirects traffic for your feeds to a Google FeedBurner feed you have created. Google FeedBurner can then track all of your feed subscriber traffic and usage and apply a variety of features you choose to improve and enhance your original WordPress feed. Google FeedBurner's services allow publishers who already have a feed to improve their understanding of and relationship with their audience. Once you have a working feed, run it through FeedBurner and realize a whole new set of benefits.</li>
 			<li><strong>Webmaster Settings</strong> - A complete solution for your webmaster <code>meta</code> keys, verifications and analytics needs. Migrates data from AIO Webmaster plugin. Uses the latest Google Analytics tracking code.</li>
 			<li><strong>Child Redirect</strong> - This module does a 301 redirect on top-level parent pages to their first child page, based first on menu order, then post title if no menu order is set.</li>
 			<li><strong>SEO/SERP</strong> - This module features a SEO/SERP tracker for various ranks and backlinks. Useful to keep track of site SEO progress.</li>
-			<li><strong>Analytics</strong> - This module, a highly improved fork of StatPress, shows you real time statistics about your site. It collects information about visitors, spiders, search keywords, feeds, browsers, OS etc. Once active, it immediately starts to collect information.</li>
+			<li><strong>Analytics</strong> - This module, a highly improved fork of StatPress, shows you real time statistics of your site. It collects information about visitors, spiders, search keywords, feeds, browsers, OS etc. Once active, it immediately starts to collect information.</li>
 * %thistotalvisits% - this page, total visits
 * %since% - Date of the first hit
 * %visits% - Today visits
@@ -116,6 +145,10 @@ function w3p_plugin_main() {
 
 		<h3>Security Suggestions</h3>
 		<p>http://perishablepress.com/5g-firewall-beta/</p>
+				</div>
+			</div>
+		</div>
+
 	</div>
 <?php
 }
@@ -261,5 +294,19 @@ if ( $total > 1 )  {
           'type' => 'list'
      ));
 }
+*/
+
+/* Get included files // useful for debugging
+$included_files = get_included_files();
+
+foreach ($included_files as $filename) {
+    echo $filename . '<br>';
+}
+
+
+
+if (isset($variable)) {}
+if (function_exists('function_name')) {}
+if (class_exists('class_name')) {}
 */
 ?>
