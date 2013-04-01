@@ -1,56 +1,34 @@
 <?php
 function display_pp_contact_form() {
 	$w3p_email = get_option('w3p_email');
+	$display = '';
 
-	if($_GET['first'] == "no") {
-		$From = trim(stripslashes($_POST['Name'])); 
-		$EmailFrom = trim(stripslashes($_POST['Email'])); 
-		$EmailTo = $w3p_email; // change this to your EMAIL ADDRESS
-		$Subject = 'Web Contact Form | New Message!'; // change this to the name of YOUR WEBSITE
-		$Name = trim(stripslashes($_POST['Name'])); 
-		$Email = trim(stripslashes($_POST['Email'])); 
-		$Message = trim(stripslashes($_POST['Message'])); 
+	if(isset($_POST['w3p_pp'])) {
+		$w3p_pp_name = $_POST['w3p_pp_name'];
+		$w3p_pp_email = $_POST['w3p_pp_email'];
+		$w3p_pp_message = $_POST['w3p_pp_message'];
+		$w3p_pp_subject = 'Web Contact Form | New Message';
 
-		// validation
-		if($Name && $Email && $Message)
-			$validationOK = true;
+		$headers = '';
+		$headers .= 'From: ' . $w3p_pp_name . ' <' . $w3p_pp_email . '>' . "\r\n";
+		$headers .= "Reply-To: " . $w3p_pp_email . "\r\n";
+		$headers .= "MIME-Version: 1.0\r\n";
+		$headers .= "Content-Type: text/html; charset=\"" . get_settings('blog_charset') . "\"\r\n";
+
+		$mail = wp_mail($w3p_email, $w3p_pp_subject, $w3p_pp_message, $headers);
+
+		if($mail)
+			$display = '<p><strong>' . __('Thank you. Your message has been sent.', 'w3p') . '</strong></p>';
 		else
-			$validationOK = false;
-
-		if(!$validationOK) {
-			echo '<h1>Contact</h1>';
-			echo '<p>There was an error with your message. Please try again.</p>';
-		}
-
-		// prepare email body text
-		$Body = "";
-		$Body .= "Name: ";
-		$Body .= $Name;
-		$Body .= "\n";
-		$Body .= "Email: ";
-		$Body .= $Email;
-		$Body .= "\n";
-		$Body .= "\n";
-		$Body .= "Message: ";
-		$Body .= "\n";
-		$Body .= $Message;
-
-		// send email 
-		$success = mail($EmailTo, $Subject, $Body, "From: $From <$EmailFrom>");
-
-		// redirect to success page 
-		if($success)
-			$display = '<p>Thank you. Your message has been sent.</p>';
-		else
-			$display = '<p>There was an error with your message. Please try again.</p>';
+			$display = '<p><strong>' . __('There was an error with your message. Please try again.', 'w3p') . '</strong></p>';
 	}
 	else {
 		$display = '
-			<form method="post" action="?first=no">
-				<p><label for="Name" id="Name">Name <small><em>(required)</em></small></label><br /><input type="text" name="Name" /></p>
-				<p><label for="Email" id="Email">Email <small><em>(required)</em></small></label><br /><input type="text" name="Email" /></p>
-				<p><label for="Message" id="Message">Message <small><em>(required)</em></small></label><br /><textarea name="Message" rows="8" cols="60"></textarea></p>
-				<p><input type="submit" name="submit" value="Send message" /></p>
+			<form method="post">
+				<p>' . __('Name', 'w3p') . '<br><input type="text" name="w3p_pp_name"></p>
+				<p>' . __('Email', 'w3p') . '<br><input type="email" name="w3p_pp_email"></p>
+				<p>' . __('Message', 'w3p') . '<br><textarea name="w3p_pp_message" rows="8" style="width: 90%;"></textarea></p>
+				<p><input type="submit" name="w3p_pp" value="' . __('Send Message', 'w3p') . '"></p>
 			</form>
 		';
 	}

@@ -15,7 +15,7 @@ function list_my_subpages($atts, $content = null) {
 		'exclude' => ''
 	);
 
-	$subpages = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = '{$defaults['child_of']}' AND post_status = 'publish' AND post_type = 'page';"));
+	$subpages = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = '{$defaults['child_of']}' AND post_status = 'publish' AND post_type = 'page';");
 
 	if($subpages <= 0) return;
 
