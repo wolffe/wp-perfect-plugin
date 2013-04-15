@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.5.2
+Version: 0.1.5.3
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011, 2012, 2013 Ciprian Popescu (getbutterfly@gmail.com)
@@ -44,6 +44,7 @@ function w3p_plugin_menu() {
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
 	add_submenu_page('w3p', 'W3P Feed Options', 'W3P Feed Options', 'manage_options', 'w3p-feedburner', 'ol_feedburner_options_subpanel');
 	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
+	add_submenu_page('w3p', 'W3P Media Sitemap', 'W3P Media Sitemap', 'manage_options', 'w3p-sitemap', 'multi_sitemap_generate');
 
 	if(get_option('w3p_analytics_run') == 1)
 		add_submenu_page('w3p', 'W3P Analytics', 'W3P Analytics', 'manage_options', __FILE__, 'iriwpsa');
@@ -226,6 +227,7 @@ include('modules/w3p-google-streetview.php');
 include('modules/w3p-google-maps.php');
 
 include('modules/w3p-seo.php');
+include('modules/w3p-sitemap.php');
 
 include('modules/w3p-misc.php');
 

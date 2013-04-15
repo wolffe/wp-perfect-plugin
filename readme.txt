@@ -1,9 +1,9 @@
 === WordPress Perfect Plugin ===
 Contributors: butterflymedia, getbutterfly
-Donate link: http://getbutterfly.com/
 Tags: utilities, developer, perfection
+License: GPLv3
 Requires at least: 3.3
-Tested up to: 3.6-alpha
+Tested up to: 3.6-beta1
 Stable tag: 0.1.5.2
 
 == Description ==
@@ -17,6 +17,10 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.5.3 =
+* Added media sitemap module
+* Added license specification
 
 = 0.1.5.2 =
 * Tweaked the Google Maps module (paragraph tag insertion issue)
