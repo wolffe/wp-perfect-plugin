@@ -156,8 +156,8 @@ function w3p_plugin_options() {
 		update_option('w3p_analytics_run', $w3p_analytics_run);
 
 		// clean up old options
-		remove_option('w3p_feedburner');
-		remove_option('feedburner_settings');
+		delete_option('w3p_feedburner');
+		delete_option('feedburner_settings');
 		?>
 		<div class="updated"><p><strong>Settings saved.</strong></p></div>
 		<?php
