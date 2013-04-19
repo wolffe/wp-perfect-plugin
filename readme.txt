@@ -1,10 +1,10 @@
 === WordPress Perfect Plugin ===
 Contributors: butterflymedia, getbutterfly
-Tags: utilities, developer, perfection
+Tags: utilities, developer, perfection, sitemap, seo
 License: GPLv3
 Requires at least: 3.3
 Tested up to: 3.6-beta1
-Stable tag: 0.1.5.2
+Stable tag: 0.1.6
 
 == Description ==
 
@@ -17,6 +17,13 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.6 =
+* Removed custom login logo (WordPress 3.6 changed the format)
+* Removed an erroneus login screen customization
+* Removed an inactive function
+* Removed Feedburner options as the plugin is outdated, and there was no update from Google for almost 3 years
+* Removed all custom dashboard CSS code
 
 = 0.1.5.3 =
 * Added media sitemap module
@@ -84,8 +91,3 @@ Upload and activate the plugin.
 
 = 0.1.0 =
 * First release (buggy, crippled and alpha quality)
-
-== Frequently Asked Questions ==
-n/a
-
-== Screenshots ==

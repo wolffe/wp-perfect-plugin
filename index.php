@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.5.3
+Version: 0.1.6
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011, 2012, 2013 Ciprian Popescu (getbutterfly@gmail.com)
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
-define('W3P_VERSION', '0.1.5.2');
+define('W3P_VERSION', '0.1.6');
 //
 
 // plugin localization
@@ -42,7 +42,6 @@ function w3p_plugin_menu() {
 	add_menu_page('Perfect Plugin', 'Perfect Plugin', 'manage_options', 'w3p', 'w3p_plugin_main', W3P_PLUGIN_URL.'/images/icon-16.png');
 	add_submenu_page('w3p', 'W3P Webmaster', 'W3P Webmaster', 'manage_options', 'w3p-webmaster', 'all_in_one_webmaster_options_page');
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
-	add_submenu_page('w3p', 'W3P Feed Options', 'W3P Feed Options', 'manage_options', 'w3p-feedburner', 'ol_feedburner_options_subpanel');
 	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
 	add_submenu_page('w3p', 'W3P Media Sitemap', 'W3P Media Sitemap', 'manage_options', 'w3p-sitemap', 'multi_sitemap_generate');
 
@@ -54,12 +53,8 @@ function add_w3p_additional_css() {
 	echo '<link rel="stylesheet" href="'.W3P_PLUGIN_URL.'/css/additional.css" type="text/css" />';
 	echo '<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>';
 }
-function add_w3p_admin_css() {
-	echo '<link type="text/css" rel="stylesheet" href="'.W3P_PLUGIN_URL.'/css/admin.css" />'."\n";
-}
 
 add_action('wp_head', 'add_w3p_additional_css');
-add_action('admin_head', 'add_w3p_admin_css');
 add_action('admin_menu', 'w3p_plugin_menu');
 
 function w3p_plugin_main() {
@@ -84,8 +79,8 @@ function w3p_plugin_main() {
 					</p>
 					<p>
 						<?php _e('By the Same Author:', 'w3p'); ?> 
-						<a href="http://getbutterfly.com/wordpress-plugins/portable-phpmyadmin/">Portable phpMyAdmin</a> <small class="tag-free">Free</small> | 
-						<a href="http://getbutterfly.com/wordpress-plugins/smartbackup/">Smart Backup</a> <small class="tag-premium">Commercial</small> | 
+						<a href="http://getbutterfly.com/wordpress-plugins/portable-phpmyadmin/">Portable phpMyAdmin</a> <sup><small>FREE</small></sup> | 
+						<a href="http://getbutterfly.com/wordpress-plugins/smartbackup/">Smart Backup</a> <sup><small>COMMERCIAL</small></sup> | 
 						<a href="http://getbutterfly.com/wordpress-plugins/"><small>Even More WordPress Plugins</small></a>
 					</p>
 				</div>
@@ -107,8 +102,6 @@ function w3p_plugin_main() {
 				<h3>Available Modules</h3>
 				<div class="inside">
 		<ul>
-			<li><strong>Custom Login</strong> - Show a little love and show a modified WordPress logo with a &quot;Powered by Perfect Plugin&quot; tag in the login page (<code>wp-login.php</code>).</li>
-			<li><strong>Google Feedburner</strong> - This module redirects traffic for your feeds to a Google FeedBurner feed you have created. Google FeedBurner can then track all of your feed subscriber traffic and usage and apply a variety of features you choose to improve and enhance your original WordPress feed. Google FeedBurner's services allow publishers who already have a feed to improve their understanding of and relationship with their audience. Once you have a working feed, run it through FeedBurner and realize a whole new set of benefits.</li>
 			<li><strong>Webmaster Settings</strong> - A complete solution for your webmaster <code>meta</code> keys, verifications and analytics needs. Migrates data from AIO Webmaster plugin. Uses the latest Google Analytics tracking code.</li>
 			<li><strong>Child Redirect</strong> - This module does a 301 redirect on top-level parent pages to their first child page, based first on menu order, then post title if no menu order is set.</li>
 			<li><strong>SEO/SERP</strong> - This module features a SEO/SERP tracker for various ranks and backlinks. Useful to keep track of site SEO progress.</li>
@@ -158,11 +151,13 @@ function w3p_plugin_options() {
 	if(isset($_POST['saveMe'])) {
 		$w3p_email = $_POST['w3p_email'];
 		$w3p_analytics_run = $_POST['w3p_analytics_run'];
-		$w3p_feedburner = $_POST['w3p_feedburner'];
 
 		update_option('w3p_email', $w3p_email);
 		update_option('w3p_analytics_run', $w3p_analytics_run);
-		update_option('w3p_feedburner', $w3p_feedburner);
+
+		// clean up old options
+		remove_option('w3p_feedburner');
+		remove_option('feedburner_settings');
 		?>
 		<div class="updated"><p><strong>Settings saved.</strong></p></div>
 		<?php
@@ -170,7 +165,6 @@ function w3p_plugin_options() {
 
 	// read in existing option value from database
     $option_value_w3p_email = get_option('w3p_email');
-    $option_value_w3p_feedburner = get_option('w3p_feedburner');
 	$w3p_email = get_option('w3p_email');
 	if($w3p_email == '')
 		$w3p_email = 'none';
@@ -178,28 +172,32 @@ function w3p_plugin_options() {
 	<div class="wrap">
 		<div id="icon-options-general" class="icon32"></div>
 		<h2>Perfect Settings</h2>
-
-		<form name="form1" method="post" action="">
-			<p>
-				<input type="text" name="w3p_email" id="w3p_email" value="<?php echo $option_value_w3p_email;?>" size="40" /> <label for="w3p_email">Contact Form Email</label>
-				<br />
-				<span class="description"><small>Contact emails will be sent to this address (currently set to <strong><?php echo $w3p_email;?></strong>).</small></span>
-			</p>
-			<p>
-				<input name="w3p_feedburner" id="w3p_feedburner" type="text" value="<?php echo $option_value_w3p_feedburner;?>" /> <label for="w3p_feedburner">FeedBurner username</label>
-			</p>
-			<h3>Modules</h3>
-			<p>
-				<select name="w3p_analytics_run">
-					<option value="1"<?php if(get_option('w3p_analytics_run') == '1') echo ' selected="selected"';?>>Enable analytics module</option>
-					<option value="0"<?php if(get_option('w3p_analytics_run') == '0') echo ' selected="selected"';?>>Disable analytics module</option>
-				</select> 
-				<br /><small>Disable this module if it causes high load to your server.</small>
-			</p>
-			<p class="submit">
-				<input type="submit" name="saveMe" class="button-primary" value="Save Changes" />
-			</p>
-		</form>
+		<div id="poststuff" class="ui-sortable meta-box-sortables">
+			<div class="postbox">
+				<h3><?php _e('WordPress Settings', 'w3p'); ?></h3>
+				<div class="inside">
+					<form name="form1" method="post" action="">
+						<p>
+							Use the <code>[pp_contact_form]</code> shortcode in a post or a page to display a simple contact form that just works.<br>
+							<input type="text" name="w3p_email" id="w3p_email" value="<?php echo $option_value_w3p_email; ?>" class="regular-text"> <label for="w3p_email">Contact Form Email</label>
+							<br>
+							<small>Contact emails will be sent to this address (currently set to <strong><?php echo $w3p_email; ?></strong>).</small>
+						</p>
+						<h3>Modules</h3>
+						<p>
+							<select name="w3p_analytics_run">
+								<option value="1"<?php if(get_option('w3p_analytics_run') == '1') echo ' selected="selected"';?>>Enable analytics module</option>
+								<option value="0"<?php if(get_option('w3p_analytics_run') == '0') echo ' selected="selected"';?>>Disable analytics module</option>
+							</select> 
+							<br /><small>Disable this module if it causes high load to your server.</small>
+						</p>
+						<p class="submit">
+							<input type="submit" name="saveMe" class="button-primary" value="Save Changes" />
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 <?php
 }
@@ -219,7 +217,6 @@ if(strpos($_SERVER['REQUEST_URI'], "eval(") || strpos($_SERVER['REQUEST_URI'], "
 
 // Begin modules
 include('modules/w3p-wordpress.php');
-include('modules/w3p-feedburner.php');
 include('modules/w3p-basic-settings.php');
 include('modules/w3p-list-subpages.php');
 include('modules/w3p-contact-form.php');
