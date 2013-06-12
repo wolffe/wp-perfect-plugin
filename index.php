@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.6
+Version: 0.1.6.2
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011, 2012, 2013 Ciprian Popescu (getbutterfly@gmail.com)
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
-define('W3P_VERSION', '0.1.6');
+define('W3P_VERSION', '0.1.6.2');
 //
 
 // plugin localization

@@ -31,7 +31,7 @@ function iriwpsa() {
 	iriwpsaOptions();
 }
 function iriwpsaOptions() {
-	if($_POST['saveit'] == 'yes') {
+	if(isset($_POST['saveit']) && $_POST['saveit'] == 'yes') {
 		update_option('wpsa_collectloggeduser', $_POST['wpsa_collectloggeduser']);
 		update_option('wpsa_autodelete', $_POST['wpsa_autodelete']);
 		update_option('wpsa_daysinoverviewgraph', $_POST['wpsa_daysinoverviewgraph']);
@@ -151,6 +151,9 @@ function iriwpsaMain() {
     AND spider=''
     AND date LIKE '" . mysql_real_escape_string($thismonth) . "%'
   ");
+
+	$qry_tmonth->change = '';
+	$qry_tmonth->added = '';
           if ($qry_lmonth->visitors <> 0)
           {
               $pc = round(100 * ($qry_tmonth->visitors / $qry_lmonth->visitors) - 100, 1);
@@ -225,6 +228,8 @@ function iriwpsaMain() {
     AND spider=''
     AND date LIKE '" . mysql_real_escape_string($thismonth) . "%'
   ");
+	$qry_tmonth->change = '';
+	$qry_tmonth->added = '';
           if ($qry_lmonth->pageview <> 0)
           {
               $pc = round(100 * ($qry_tmonth->pageview / $qry_lmonth->pageview) - 100, 1);
@@ -296,6 +301,8 @@ function iriwpsaMain() {
     AND spider<>''
     AND date LIKE '" . mysql_real_escape_string($thismonth) . "%'
   ");
+	$qry_tmonth->change = '';
+	$qry_tmonth->added = '';
           if ($qry_lmonth->spiders <> 0)
           {
               $pc = round(100 * ($qry_tmonth->spiders / $qry_lmonth->spiders) - 100, 1);
@@ -366,6 +373,8 @@ function iriwpsaMain() {
     AND spider=''
     AND date LIKE '" . mysql_real_escape_string($thismonth) . "%'
   ");
+	$qry_tmonth->change = '';
+	$qry_tmonth->added = '';
           if ($qry_lmonth->feeds <> 0)
           {
               $pc = round(100 * ($qry_tmonth->feeds / $qry_lmonth->feeds) - 100, 1);
@@ -805,6 +814,7 @@ function iriValueTable($fld, $fldtitle, $limit = 0, $param = "", $queryfld = "",
 
 		foreach($qry as $rk) {
 			$pc = round(($rk->pageview * 100 / $rks), 1);
+			$rk->$fld = '';
 			if($fld == 'date')
 				$rk->$fld = irihdate($rk->$fld);
 			if($fld == 'urlrequested')
@@ -814,9 +824,7 @@ function iriValueTable($fld, $fldtitle, $limit = 0, $param = "", $queryfld = "",
 
 			echo '
 			<tr>
-				<td style="width: 400px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' . my_substr($rk->$fld, 0, 50);
-					if(strlen("$rk->fld") >= 50) echo '...';
-				echo '</td>
+				<td style="width: 400px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' . my_substr($rk->$fld, 0, 50) . '</td>
 				<td>' . $rk->pageview . '</td>
 				<td>
 					<div style="text-align: right; padding: 2px; height: 16px; width: ' . number_format(($tdwidth * $pc / 100), 1, '.', '') . 'px;background:' . irirgbhex($red, $green, $blue) . ';border-top:1px solid ' . irirgbhex($red + 20, $green + 20, $blue) . ';border-bottom:1px solid ' . irirgbhex($red - 20, $green - 20, $blue) . ';"><small>'.$pc.'%</small></div>
@@ -835,7 +843,7 @@ function iriValueTable($fld, $fldtitle, $limit = 0, $param = "", $queryfld = "",
       function iriDomain($ip)
       {
           $host = gethostbyaddr($ip);
-          if (ereg('^([0-9]{1,3}\.){3}[0-9]{1,3}$', $host))
+          if (preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/i', $host))
           {
               return "";
           }
@@ -1057,13 +1065,13 @@ function iriStatAppend() {
 
 	// URL (requested)
 	$urlRequested = iri_wpsa_URL();
-	if(eregi(".ico$", $urlRequested))
+	if(preg_match("/.ico$/i", $urlRequested))
 		return '';
-	if(eregi("favicon.ico", $urlRequested))
+	if(preg_match("/favicon.ico/i", $urlRequested))
 		return '';
-	if(eregi(".css$", $urlRequested))
+	if(preg_match("/.css$/i", $urlRequested))
 		return '';
-	if(eregi(".js$", $urlRequested))
+	if(preg_match("/.js$/i", $urlRequested))
 		return '';
 	if(stristr($urlRequested, "/wp-content/plugins") != false)
 		return '';

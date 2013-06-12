@@ -94,34 +94,18 @@ function getpagerank($url) {
 
 
 //get alexa popularity 
-function get_alexa_popularity($url) 
-{    
-global $alexa_backlink, $alexa_reach; 
-    $alexaxml = "http://xml.alexa.com/data?cli=10&dat=nsa&url=".$url; 
-    
-    $xml_parser = xml_parser_create(); 
-    /* 
-    $fp = fopen($alexaxml, "r") or die("Error: Reading XML data."); 
-    $data = ""; 
-    while (!feof($fp)) { 
-        $data .= fread($fp, 8192); 
-        //echo "masuk while<br />"; 
-    } 
-    fclose($fp); 
-    */ 
-    $data=file_get_contents_curl($alexaxml); 
-    xml_parse_into_struct($xml_parser, $data, $vals, $index); 
+function get_alexa_popularity($url) {
+	global $alexa_backlink, $alexa_reach; 
+	$alexaxml = "http://xml.alexa.com/data?cli=10&dat=nsa&url=".$url; 
+
+	$xml_parser = xml_parser_create(); 
+	$data=file_get_contents_curl($alexaxml); 
+	xml_parse_into_struct($xml_parser, $data, $vals, $index); 
     xml_parser_free($xml_parser); 
-    
-    //print_r($vals); 
-    //echo "<br />"; 
-    //print_r($index); 
     
     $index_popularity = $index['POPULARITY'][0]; 
     $index_reach = $index['REACH'][0]; 
     $index_linksin = $index['LINKSIN'][0]; 
-    //echo $index_popularity."<br />"; 
-    //print_r($vals[$index_popularity]); 
     $alexarank = $vals[$index_popularity]['attributes']['TEXT']; 
     $alexa_backlink = $vals[$index_linksin]['attributes']['NUM']; 
     $alexa_reach = $vals[$index_reach]['attributes']['RANK']; 
@@ -157,21 +141,18 @@ function alexa_reach_rank($url)
 
 
 
+if(!function_exists('file_get_contents_curl')) {
+	function file_get_contents_curl($url) { 
+		$ch = curl_init(); 
+		curl_setopt($ch, CURLOPT_HEADER, 0); 
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser. 
+		curl_setopt($ch, CURLOPT_URL, $url); 
+		$data = curl_exec($ch); 
+		curl_close($ch); 
 
-function file_get_contents_curl($url) { 
-    $ch = curl_init(); 
-    curl_setopt($ch, CURLOPT_HEADER, 0); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser. 
-    curl_setopt($ch, CURLOPT_URL, $url); 
-    $data = curl_exec($ch); 
-    curl_close($ch); 
-
-    return $data; 
+		return $data; 
+	}
 }
-
-
-
-
 
 
 
@@ -216,18 +197,9 @@ function getPageData($url) {
 
 function wp_seo_rank_widget_admin_function() {
 	global $wpdb;
-	$data = get_option('wp_seo_rank');
-
-	if(isset($_POST['wp_seo_rank_save'])) {
-		$data['feedburner'] = esc_attr($_POST['wp_seo_rank_feedburner']);
-		$data['ValLastUpdate'] = date('Y-m-d');
-		update_option('wp_seo_rank', $data);
-	}
 
 	$w3p_tracked_site = get_option('siteurl');
-	?>
 
-	<?php
 	$url = $w3p_tracked_site;
 	$content = googlebot_lastaccess($url);
 	$date = substr($content , 0, strpos($content, 'GMT') + strlen('GMT'));
@@ -236,23 +208,11 @@ function wp_seo_rank_widget_admin_function() {
 		echo '<strong>'.$w3p_tracked_site.'</strong>';
 	echo '</p>';
 	echo '<p>';
-		echo 'Your site has a PageRank&trade; of <strong>'.getpagerank($url).'</strong>. Google bot last visited your site on <strong>'.$date.'</strong> and detected <a target="_blank" href="http://www.google.com/search?oe=utf8&ie=utf8&source=uds&start=0&filter=0&hl=en&q=link:'.site_url().'">'.number_format(get_backlinks_google(site_url())).'</a> backlinks.<br />';
+		echo 'Your site has a PageRank&trade; of <strong>'.getpagerank($url).'</strong>. Google bot last visited your site on <strong>'.$date.'</strong>.<br>';
 		echo 'Your site is ranked <strong><a target="_blank" href="http://www.alexa.com/siteinfo/'.$url.'">'.get_alexa_popularity($url).'</a></strong> in Alexa and has <strong>'.alexa_backlink($url).'</strong> backlinks <em>(based on Alexa)</em>.';
-	echo '</p>';
-	echo '<p>';
-		echo 'Google Feedburner has <a target="_blank" href="http://feeds.feedburner.com/'.get_option('w3p_feedburner').'">'.number_format(getFeedBurner(get_option('w3p_feedburner'))).'</a> subscribers.';
 	echo '</p>';
 }
 
-function get_backlinks_google($url) {
-	$content = file_get_contents('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&filter=0&key=ABQIAAAA6f5Achoodo5s2Q2049vn6BSIkO30j4gnxwlOBxQkFXOonq3PsBQ0hUYBhAxwx8DYL03zbFQWDSv_nA&q=link:'.urlencode($url));
-	$data = json_decode($content);
-	return intval($data->responseData->cursor->estimatedResultCount);
-}
-function getFeedBurner($user) {
-	$xml = file_get_contents("https://feedburner.google.com/api/awareness/1.0/GetFeedData?uri=http://feeds.feedburner.com/$user");
-	return get_match('/circulation="(.*)"/isU',$xml);
-}
 function get_match($regex,$content) {
 	preg_match($regex,$content,$matches);
 	return $matches[1];
@@ -261,23 +221,6 @@ function get_match($regex,$content) {
 
 // SEO TRACKER PAGE FUNCTION
 function w3p_seo_options() {
-	$hidden_field_name = 'wpfc_submit_hidden';
-	$w3p_email_field_name = 'w3p_email';
-
-	// read in existing option value from database
-    $option_value_w3p_email = get_option('w3p_email');
-
-    // See if the user has posted us some information // if they did, this hidden field will be set to 'Y'
-	if(isset($_POST[$hidden_field_name]) && $_POST[$hidden_field_name] == 'Y') {
-		$option_value_w3p_email = $_POST[$w3p_email_field_name];
-
-		update_option('w3p_email', $option_value_w3p_email);
-		?>
-		<div class="updated"><p><strong>Settings saved.</strong></p></div>
-		<?php
-	}
-
-	$w3p_email = get_option('w3p_email');
 	$w3p_tracked_site = get_option('siteurl');
 	?>
 	<div class="wrap">

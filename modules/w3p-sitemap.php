@@ -13,14 +13,14 @@ function IsPeacedevImageSitemapWritable($filename) {
 }
 
 function multi_sitemap_generate() {
-	if($_POST['schedule']) {
+	if(isset($_POST['schedule'])) {
 		wp_clear_scheduled_hook('my_hourly_event');
 		wp_clear_scheduled_hook('peacedev_hourly_event');
 		wp_schedule_event(time(), $_POST['timeschedule'], 'peacedev_hourly_event');
 
 		echo '<div class="updated fade"><p>Site map generation scheduled</p></div>';
 	}
-	if($_POST['submit']) {
+	if(isset($_POST['submit'])) {
 		$st = image_sitemap_loop_peacedev();
 		$st2 = mobile_sitemap_loop_peacedev();
 		$st3 = video_sitemap_loop_peacedev();

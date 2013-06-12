@@ -3,8 +3,8 @@ Contributors: butterflymedia, getbutterfly
 Tags: utilities, developer, perfection, sitemap, seo
 License: GPLv3
 Requires at least: 3.3
-Tested up to: 3.6-beta1
-Stable tag: 0.1.6
+Tested up to: 3.6-beta3
+Stable tag: 0.1.6.2
 
 == Description ==
 
@@ -17,6 +17,17 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.6.2 =
+* Removed deprecated functions from mod-analytics.php
+* Fixed unset POST variables in w3p-sitemap.php
+* Fixed version number in index.php
+* TODO: Include a native WordPress deprecation checker
+* TODO: Include a malware check (root string finder)
+
+= 0.1.6.1 =
+* Removed empty forms from SEO Tracker
+* Removed an inactive function
 
 = 0.1.6 =
 * Removed custom login logo (WordPress 3.6 changed the format)
