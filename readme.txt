@@ -3,8 +3,8 @@ Contributors: butterflymedia, getbutterfly
 Tags: utilities, developer, perfection, sitemap, seo
 License: GPLv3
 Requires at least: 3.3
-Tested up to: 3.6-beta3
-Stable tag: 0.1.6.2
+Tested up to: 3.6-beta4
+Stable tag: 0.1.7
 
 == Description ==
 
@@ -17,6 +17,12 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.7 =
+* Fixed Google Streetview (backend)
+* Reformatted SEO tracker
+* Reformatted plugin dashboard page
+* Added dashboard "planet" widget for getbutterfly.com
 
 = 0.1.6.2 =
 * Removed deprecated functions from mod-analytics.php

@@ -1,13 +1,11 @@
 <?php 
 // Run the filter when a blog is shown
-add_filter( 'the_content', 'filter_simple_streetview' );
+add_filter('the_content', 'filter_simple_streetview');
 
 function filter_simple_streetview($content) {
-	//print($content);
 	preg_match_all("/\[streetview([^\]]*)\](.*?)\[\/streetview\]/", $content, $matches);
-	
-	foreach ($matches[0] as $k=>$match)
-	{
+
+	foreach ($matches[0] as $k=>$match) {
 		$attributes = $matches[1][$k];
 		$string = $matches[2][$k];
 		$content = str_replace($match, simple_streetview_div($string, $attributes, $k), $content);
@@ -17,22 +15,20 @@ function filter_simple_streetview($content) {
 }
 
 function simple_streetview_div($string, $attr_string, $k=0) {
-
-	if ($attributes = simple_streetview_attr2arr($attr_string)) {
-
+	if($attributes = simple_streetview_attr2arr($attr_string)) {
 		$javascript = "
-		<script type='text/javascript'>
-		  	var myLatlng = new google.maps.LatLng(".$attributes['lat'].",".$attributes['lng'].");
-			var panoramaOptions = {
-			  position: myLatlng,
-			  addressControl: false,
-			  pov: {
+		<script>
+		var myLatlng = new google.maps.LatLng(".$attributes['lat'].",".$attributes['lng'].");
+		var panoramaOptions = {
+			position: myLatlng,
+			addressControl: false,
+			pov: {
 				heading: ".$attributes['heading'].",
 				pitch: ".$attributes['pitch'].",
 				zoom: ".$attributes['zoom']."
-			  }
-			};
-			var panorama_$k = new  google.maps.StreetViewPanorama(document.getElementById('streetview_canvas_$k'), panoramaOptions);
+			}
+		};
+		var panorama_$k = new google.maps.StreetViewPanorama(document.getElementById('streetview_canvas_$k'), panoramaOptions);
 		</script>";
 		unset($attributes['lat']);
 		unset($attributes['lng']);
@@ -61,12 +57,10 @@ function simple_streetview_attr2arr($attr) {
 
 function simple_streetview_style($arr) {
 	$style = '';
-	foreach ($arr as $key => $value)
-	{
-		$style.= $key.': '.$value.'; ';
+	foreach($arr as $key => $value) {
+		$style .= $key . ': ' . $value . '; ';
 	}
 	return $style;
-	
 }
 
 /* Editor */
@@ -101,66 +95,55 @@ function streetview_create_iframe() {
 
 /* Prints the inner fields for the custom post/page section */
 function streetview_inner_custom_box() {
-	//media_upload_header();
-	
 	?>
 	<div style="padding: 15px;">
-		<h3 class="media-title">Add Google Street View panorama</h3>
-		<p class="howto">Use the searchbox or manual panning to find you location. Drag the yellow icon to a blue area on the map. When the Street View window appears, pan and zoom till you see what you want and finish by clicking &quot;Add this view&quot;.</p>
-		<input id="streetview_address" type="text" name="address" value="street, city" />&nbsp;<input type="submit" name="geocode_button" value="Show on map" onclick="streetview_findaddress()"/><br />
+		<h3 class="media-title">Add Google Street View</h3>
+		<p class="howto">Use the searchbox or manual panning to find your location. Drag the yellow icon to a blue area on the map. When the Street View window appears, pan and zoom till you see what you want and finish by clicking &quot;Add this view&quot;.</p>
+		<input id="streetview_address" type="text" name="address" placeholder="street address, city"> <input type="submit" name="geocode_button" value="Show on map" onclick="streetview_findaddress()"><br>
 		<div id="streetview_canvas" style="width: 620px; height: 300px"></div>
-		<br/>
+		<br>
 		<input class="button" style="font-weight: bold;" value="Add this view" type="button" onclick="javascript:streetview_getthepov();">
 	</div>
-	<script type="text/javascript">
-		var map;
-		var geocoder;
-		function streetview_initialize() {
-		  var center = new google.maps.LatLng(50, -50);
-		  var mapOptions = {
+	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script>
+	var map;
+	var geocoder;
+	function streetview_initialize() {
+		var center = new google.maps.LatLng(50, -50);
+		var mapOptions = {
 			center: center,
 			zoom: 2,
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			streetViewControl: true
-		  };
-		  geocoder = new google.maps.Geocoder();
-		  map = new google.maps.Map(document.getElementById("streetview_canvas"), mapOptions);
+		};
+		geocoder = new google.maps.Geocoder();
+		map = new google.maps.Map(document.getElementById("streetview_canvas"), mapOptions);
+	}
+	function streetview_getthepov() {
+		var pano = map.getStreetView();
+		var pov = pano.getPov();
+
+		if(pos = pano.getPosition()) {
+			var embedcode = "[streetview width=\"100%\" height=\"250px\" lat=\""+pos.lat()+"\" lng=\""+pos.lng()+"\" heading=\""+pov.heading+"\" pitch=\""+pov.pitch+"\" zoom=\""+pov.zoom+"\"][/streetview]<br/>";
+			top.send_to_editor(embedcode);
+		} else {
+			alert('Drag and drop the yellow icon to a place first!');
 		}
-		
-		function streetview_getthepov() {
-			var pano = map.getStreetView();
-			var pov = pano.getPov();
-			
-			if (pos = pano.getPosition()) {
-				
-				
-				var embedcode = "[streetview width=\"100%\" height=\"250px\" lat=\""+pos.lat()+"\" lng=\""+pos.lng()+"\" heading=\""+pov.heading+"\" pitch=\""+pov.pitch+"\" zoom=\""+pov.zoom+"\"][/streetview]<br/>";
-								
-				top.send_to_editor(embedcode);
-			} else {
-				alert('Drag and drop the yellow icon to a place first!');
-			}
-		}
-		
-		// based on google's geocode example code	
-		function streetview_findaddress() {
-			var address = document.getElementById("streetview_address").value;
-			geocoder.geocode( { 'address': address}, function(results, status) {
-			  if (status == google.maps.GeocoderStatus.OK) {
+	}
+	// based on google's geocode example code	
+	function streetview_findaddress() {
+		var address = document.getElementById("streetview_address").value;
+		geocoder.geocode( { 'address': address}, function(results, status) {
+			if(status == google.maps.GeocoderStatus.OK) {
 				map.setCenter(results[0].geometry.location);
 				map.setZoom(15);
-			  } else {
+			} else {
 				alert("Geocode was not successful for the following reason: " + status);
-			  }
-			});
-		}
-				
-		streetview_initialize();
-		
+			}
+		});
+	}
+	streetview_initialize();
 	</script>
-	
 	<?php
-	
 }
-
 ?>

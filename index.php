@@ -5,7 +5,7 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.6.2
+Version: 0.1.7
 
 WordPress Perfect Plugin
 Copyright (C) 2010, 2011, 2012, 2013 Ciprian Popescu (getbutterfly@gmail.com)
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
-define('W3P_VERSION', '0.1.6.2');
+define('W3P_VERSION', '0.1.7');
 //
 
 // plugin localization
@@ -42,7 +42,6 @@ function w3p_plugin_menu() {
 	add_menu_page('Perfect Plugin', 'Perfect Plugin', 'manage_options', 'w3p', 'w3p_plugin_main', W3P_PLUGIN_URL.'/images/icon-16.png');
 	add_submenu_page('w3p', 'W3P Webmaster', 'W3P Webmaster', 'manage_options', 'w3p-webmaster', 'all_in_one_webmaster_options_page');
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
-	add_submenu_page('w3p', 'W3P SEO Tracker', 'W3P SEO Tracker', 'manage_options', 'w3p-seo', 'w3p_seo_options');
 	add_submenu_page('w3p', 'W3P Media Sitemap', 'W3P Media Sitemap', 'manage_options', 'w3p-sitemap', 'multi_sitemap_generate');
 
 	if(get_option('w3p_analytics_run') == 1)
@@ -56,6 +55,7 @@ function add_w3p_additional_css() {
 
 add_action('wp_head', 'add_w3p_additional_css');
 add_action('admin_menu', 'w3p_plugin_menu');
+add_action('wp_dashboard_setup', 'w3p_add_dashboard_widgets'); // dashboard news, right from thge horse's mouth
 
 function w3p_plugin_main() {
 	if(!current_user_can('manage_options')) {
@@ -70,18 +70,20 @@ function w3p_plugin_main() {
 				<h3>About Perfect Plugin (W3P) <small>(<a href="http://getbutterfly.com/" rel="external">official web site</a>)</small></h3>
 				<div class="inside">
 					<p><small>You are using Perfect Plugin version <strong><?php echo W3P_VERSION; ?></strong>.</small></p>
+					<p><img src="<?php echo W3P_PLUGIN_URL; ?>/images/icon-32.png" alt="" class="alignright">Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
 					<p>
-						<?php _e('Related Sites:', 'w3p'); ?> 
+						<?php _e('Related sites:', 'w3p'); ?> 
 						<a href="http://getbutterfly.com/">getButterfly</a> | 
 						<a href="http://roo.ie/">Roo.ie</a> | 
 						<a href="http://www.demain.ie/">Demain Technologies</a> | 
 						<a href="http://browsehappy.com/">Browse Happy</a> <small>:) Upgrade your browser today!</small>
-					</p>
-					<p>
-						<?php _e('By the Same Author:', 'w3p'); ?> 
-						<a href="http://getbutterfly.com/wordpress-plugins/portable-phpmyadmin/">Portable phpMyAdmin</a> <sup><small>FREE</small></sup> | 
-						<a href="http://getbutterfly.com/wordpress-plugins/smartbackup/">Smart Backup</a> <sup><small>COMMERCIAL</small></sup> | 
-						<a href="http://getbutterfly.com/wordpress-plugins/"><small>Even More WordPress Plugins</small></a>
+						<br>
+						<small>
+							<?php _e('By the same author:', 'w3p'); ?> 
+							<a href="http://getbutterfly.com/wordpress-plugins/portable-phpmyadmin/">Portable phpMyAdmin</a> <sup>FREE</sup> | 
+							<a href="http://getbutterfly.com/wordpress-plugins/smartbackup/">Smart Backup</a> <sup>COMMERCIAL</sup> | 
+							<a href="http://getbutterfly.com/wordpress-plugins/">Even More WordPress Plugins</a>
+						</small>
 					</p>
 				</div>
 			</div>
@@ -89,10 +91,16 @@ function w3p_plugin_main() {
 
 		<div id="poststuff" class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h3>What is W3P?</h3>
+				<h3>SEO Tracker</h3>
 				<div class="inside">
-					<img src="<?php echo W3P_PLUGIN_URL; ?>/images/icon-32.png" alt="" class="alignright">
-					<p>Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
+					<?php wp_seo_rank_widget_admin_function(); ?>
+
+					<p><small>Quick Links: 
+						<a href="http://www.google.com/webmasters/" rel="external">Google Webmaster Tools</a> | 
+						<a href="http://www.google.com/analytics/" rel="external">Google Analytics</a> | 
+						<a href="http://www.bing.com/toolbox/webmasters/" rel="external">Bing Webmaster Tools</a> | 
+						<a href="http://www.alexa.com/" rel="external">Alexa Site Tools</a>
+					</small></p>
 				</div>
 			</div>
 		</div>
@@ -104,7 +112,6 @@ function w3p_plugin_main() {
 		<ul>
 			<li><strong>Webmaster Settings</strong> - A complete solution for your webmaster <code>meta</code> keys, verifications and analytics needs. Migrates data from AIO Webmaster plugin. Uses the latest Google Analytics tracking code.</li>
 			<li><strong>Child Redirect</strong> - This module does a 301 redirect on top-level parent pages to their first child page, based first on menu order, then post title if no menu order is set.</li>
-			<li><strong>SEO/SERP</strong> - This module features a SEO/SERP tracker for various ranks and backlinks. Useful to keep track of site SEO progress.</li>
 			<li><strong>Analytics</strong> - This module, a highly improved fork of StatPress, shows you real time statistics of your site. It collects information about visitors, spiders, search keywords, feeds, browsers, OS etc. Once active, it immediately starts to collect information.</li>
 * %thistotalvisits% - this page, total visits
 * %since% - Date of the first hit
@@ -227,6 +234,8 @@ include('modules/w3p-seo.php');
 include('modules/w3p-sitemap.php');
 
 include('modules/w3p-misc.php');
+
+include('modules/w3p-dashboard-widget.php');
 
 // Begin other
 if(get_option('w3p_analytics_run') == 1)

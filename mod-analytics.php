@@ -1096,7 +1096,7 @@ function iriStatAppend() {
 		// Get OS and browser
 		$os = iriGetOS($userAgent);
 		$browser = iriGetBrowser($userAgent);
-		list($searchengine, $search_phrase) = explode("|", iriGetSE($referrer));
+		@list($searchengine, $search_phrase) = explode('|', iriGetSE($referrer));
 	}
 	// Auto-delete visits if...
 	if(get_option('wpsa_autodelete_spider') != '') {
