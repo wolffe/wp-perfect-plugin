@@ -68,7 +68,7 @@ function w3p_plugin_main() {
 				<h3><span class="dashicons dashicons-lightbulb"></span> About Perfect Plugin (W3P)</h3>
 				<div class="inside">
 					<p><small>You are using Perfect Plugin version <strong><?php echo W3P_VERSION; ?></strong>.</small></p>
-					<p><img src="<?php echo W3P_PLUGIN_URL; ?>/images/icon-32.png" alt="" class="alignright">Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
+					<p>Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
 
                     <p>For support, feature requests and bug reporting, please visit the <a href="//getbutterfly.com/" rel="external">official website</a>.</p>
                     <p>&copy;<?php echo date('Y'); ?> <a href="//getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <a   href="//getbutterfly.com/forums/" rel="external">Support forums</a> &middot; <a href="//getbutterfly.com/trac/" rel="external">Trac</a> &middot; <a href="http://outdatedbrowser.com/en">Upgrade your browser today!</a> &middot; <small>Code wrangling since 2005</small></p>
