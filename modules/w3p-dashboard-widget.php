@@ -18,7 +18,7 @@ function w3p_dashboard_output() {
 }
 function w3p_add_dashboard_widgets() {
 	global $w3p_filter_capability, $w3p_widget_title;
-	$w3p_widget_title = apply_filters('w3p_filter_widget_title', __('getButterfly.com Planet', 'w3p'));
+	$w3p_widget_title = apply_filters('w3p_filter_widget_title', __('getButterfly Planet', 'w3p'));
 	$w3p_filter_capability = apply_filters('w3p_filter_capability_all', 'read');
 
 	if(current_user_can($w3p_filter_capability)) {

@@ -5,10 +5,10 @@ Plugin URI: http://getbutterfly.com/wordpress-plugins/wordpress-perfect-plugin/
 Description: Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
 Author: Ciprian Popescu
 Author URI: http://getbutterfly.com/
-Version: 0.1.7
+Version: 0.1.9
 
 WordPress Perfect Plugin
-Copyright (C) 2010, 2011, 2012, 2013 Ciprian Popescu (getbutterfly@gmail.com)
+Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 Ciprian Popescu (getbutterfly@gmail.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 define('W3P_PLUGIN_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 define('W3P_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
-define('W3P_VERSION', '0.1.7');
+define('W3P_VERSION', '0.1.9');
 //
 
 // plugin localization
@@ -43,9 +43,7 @@ function w3p_plugin_menu() {
 	add_submenu_page('w3p', 'W3P Webmaster', 'W3P Webmaster', 'manage_options', 'w3p-webmaster', 'all_in_one_webmaster_options_page');
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
 	add_submenu_page('w3p', 'W3P Media Sitemap', 'W3P Media Sitemap', 'manage_options', 'w3p-sitemap', 'multi_sitemap_generate');
-
-	if(get_option('w3p_analytics_run') == 1)
-		add_submenu_page('w3p', 'W3P Analytics', 'W3P Analytics', 'manage_options', __FILE__, 'iriwpsa');
+	add_submenu_page('w3p', 'W3P Sweeper', 'W3P Sweeper', 'manage_options', 'w3p-sweeper', 'w3p_sweeper');
 }
 
 function add_w3p_additional_css() {
@@ -71,64 +69,21 @@ function w3p_plugin_main() {
 				<div class="inside">
 					<p><small>You are using Perfect Plugin version <strong><?php echo W3P_VERSION; ?></strong>.</small></p>
 					<p><img src="<?php echo W3P_PLUGIN_URL; ?>/images/icon-32.png" alt="" class="alignright">Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
-					<p>
-						<?php _e('Related sites:', 'w3p'); ?> 
-						<a href="http://getbutterfly.com/">getButterfly</a> | 
-						<a href="http://roo.ie/">Roo.ie</a> | 
-						<a href="http://www.demain.ie/">Demain Technologies</a> | 
-						<a href="http://browsehappy.com/">Browse Happy</a> <small>:) Upgrade your browser today!</small>
-						<br>
-						<small>
-							<?php _e('By the same author:', 'w3p'); ?> 
-							<a href="http://getbutterfly.com/wordpress-plugins/portable-phpmyadmin/">Portable phpMyAdmin</a> <sup>FREE</sup> | 
-							<a href="http://getbutterfly.com/wordpress-plugins/smartbackup/">Smart Backup</a> <sup>COMMERCIAL</sup> | 
-							<a href="http://getbutterfly.com/wordpress-plugins/">Even More WordPress Plugins</a>
-						</small>
-					</p>
+
+                    <p>For support, feature requests and bug reporting, please visit the <a href="//getbutterfly.com/" rel="external">official website</a>.</p>
+                    <p>&copy;<?php echo date('Y'); ?> <a href="//getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <a   href="//getbutterfly.com/forums/" rel="external">Support forums</a> &middot; <a href="//getbutterfly.com/trac/" rel="external">Trac</a> &middot; <a href="http://outdatedbrowser.com/en">Upgrade your browser today!</a> &middot; <small>Code wrangling since 2005</small></p>
 				</div>
 			</div>
 		</div>
 
-		<div id="poststuff" class="ui-sortable meta-box-sortables">
-			<div class="postbox">
-				<h3>SEO Tracker</h3>
-				<div class="inside">
-					<?php wp_seo_rank_widget_admin_function(); ?>
-
-					<p><small>Quick Links: 
-						<a href="http://www.google.com/webmasters/" rel="external">Google Webmaster Tools</a> | 
-						<a href="http://www.google.com/analytics/" rel="external">Google Analytics</a> | 
-						<a href="http://www.bing.com/toolbox/webmasters/" rel="external">Bing Webmaster Tools</a> | 
-						<a href="http://www.alexa.com/" rel="external">Alexa Site Tools</a>
-					</small></p>
-				</div>
-			</div>
-		</div>
-
-		<div id="poststuff" class="ui-sortable meta-box-sortables">
+		<div id="poststuff">
 			<div class="postbox">
 				<h3>Available Modules</h3>
 				<div class="inside">
 		<ul>
 			<li><strong>Webmaster Settings</strong> - A complete solution for your webmaster <code>meta</code> keys, verifications and analytics needs. Migrates data from AIO Webmaster plugin. Uses the latest Google Analytics tracking code.</li>
 			<li><strong>Child Redirect</strong> - This module does a 301 redirect on top-level parent pages to their first child page, based first on menu order, then post title if no menu order is set.</li>
-			<li><strong>Analytics</strong> - This module, a highly improved fork of StatPress, shows you real time statistics of your site. It collects information about visitors, spiders, search keywords, feeds, browsers, OS etc. Once active, it immediately starts to collect information.</li>
-* %thistotalvisits% - this page, total visits
-* %since% - Date of the first hit
-* %visits% - Today visits
-* %totalvisits% - Total visits
-* %os% - Operative system
-* %browser% - Browser
-* %ip% - IP address
-* %visitorsonline% - Counts all online visitors
-* %usersonline% - Counts logged online visitors
-* %toppost% - The most viewed Post
-* %topbrowser% - The most used Browser
-* %topos% - The most used O.S.
-* %thistotalpages% - Total pageviews so far
-* %pagestoday% - Pageviews today
-* %pagesyesterday% - Pageviews yesterday
-* %latesthits%		</ul>
+		</ul>
 		<h3>Current Shortcodes</h3>
 		<ul>
 			<li><strong>List Subpages</strong> - Use the <code>[subpages]</code> shortcode that lists the sub pages of the current page as a <code>ul/li</code> list, allowing you to use parent pages in a similar way to categories. The <code>ul</code> structure is ready for styling using this class - <code>&lt;ul class=&quot;w3p-subpages&quot;&gt;</code>.</li>
@@ -157,10 +112,8 @@ function w3p_plugin_main() {
 function w3p_plugin_options() {
 	if(isset($_POST['saveMe'])) {
 		$w3p_email = $_POST['w3p_email'];
-		$w3p_analytics_run = $_POST['w3p_analytics_run'];
 
 		update_option('w3p_email', $w3p_email);
-		update_option('w3p_analytics_run', $w3p_analytics_run);
 
 		// clean up old options
 		delete_option('w3p_feedburner');
@@ -191,13 +144,7 @@ function w3p_plugin_options() {
 							<small>Contact emails will be sent to this address (currently set to <strong><?php echo $w3p_email; ?></strong>).</small>
 						</p>
 						<h3>Modules</h3>
-						<p>
-							<select name="w3p_analytics_run">
-								<option value="1"<?php if(get_option('w3p_analytics_run') == '1') echo ' selected="selected"';?>>Enable analytics module</option>
-								<option value="0"<?php if(get_option('w3p_analytics_run') == '0') echo ' selected="selected"';?>>Disable analytics module</option>
-							</select> 
-							<br /><small>Disable this module if it causes high load to your server.</small>
-						</p>
+						<p>No modules available.</p>
 						<p class="submit">
 							<input type="submit" name="saveMe" class="button-primary" value="Save Changes" />
 						</p>
@@ -207,6 +154,10 @@ function w3p_plugin_options() {
 		</div>
 	</div>
 <?php
+}
+
+function w3p_sweeper() {
+	include('modules/w3p-sweeper.php');
 }
 
 // Security modules // built-in
@@ -230,91 +181,9 @@ include('modules/w3p-contact-form.php');
 include('modules/w3p-google-streetview.php');
 include('modules/w3p-google-maps.php');
 
-include('modules/w3p-seo.php');
 include('modules/w3p-sitemap.php');
 
 include('modules/w3p-misc.php');
 
 include('modules/w3p-dashboard-widget.php');
-
-// Begin other
-if(get_option('w3p_analytics_run') == 1)
-	include('mod-analytics.php');
-
-
-// Native WP pagination function
-/*
-The function takes an array of parameters that make it versatile enough to use for any kind of paging:
-
-    base
-    This is the path for the page number links, not including the pagination-specific part of the URL. The characters %_% will be substituted in that URL for the page-specific part of the URL.
-    format
-    This is the "page" part of the URL. %#% is substituted for the page number. For example, page/%#% or ?page=%#%.
-    total
-    The total number of pages available.
-    current
-    The current page number.
-    show_all
-    Lists all page links, instead of limiting it to a certain number of links to the left and right of the current page.
-    prev_next
-    Includes the "Previous" and "Next" links (if applicable), just as you might normally do with the previous_posts_link() function.
-    prev_text and next_text
-    Text to put inside the "Previous" and "Next" links.
-    end_size
-    The number of page links to show at the end. Defaults to 1 (e.g. 1 2 3 … 10).
-    mid_size­
-    The number of pages to show on either side of the current page. Defaults to 2 (example: 1 … 3 4 5 6 7 … 10).
-    type
-    Allows you to specify an output style. The default is "plain," which is just a string of links. Can also be set to list (i.e. ul and li representation of links) and array (i.e. returns an array of page links to be potentially outputted any way you like in code).
-    You can also add query arguments and fragments.
-
-It will generate this:
-
-<ul class='page-numbers'>
-     <li><span class='page-numbers current'>1</span></li>
-     <li><a class='page-numbers' href='http://mysite.com/page/2/'>2</a></li>
-     <li><a class='page-numbers' href='http://mysite.com/page/3/'>3</a></li>
-     <li><a class='page-numbers' href='http://mysite.com/page/4/'>4</a></li> 
-     <li><a class='page-numbers' href='http://mysite.com/page/5/'>5</a></li>
-     <li><span class='page-numbers dots'>...</span></li>
-     <li><a class='page-numbers' href='http://mysite.com/page/10/'>10</a></li>
-     <li><a class='next page-numbers' href='http://mysite.com/page/2/'>Next &raquo;</a></li>
-</ul>
-
-*/
-/*
-// get total number of pages
-global $wp_query;
-$total = $wp_query->max_num_pages;
-// only bother with the rest if we have more than 1 page!
-if ( $total > 1 )  {
-     // get the current page
-     if ( !$current_page = get_query_var('paged') )
-          $current_page = 1;
-     // structure of "format" depends on whether we're using pretty permalinks
-     $format = empty( get_option('permalink_structure') ) ? '&page=%#%' : 'page/%#%/';
-     echo paginate_links(array(
-          'base' => get_pagenum_link(1) . '%_%',
-          'format' => $format,
-          'current' => $current_page,
-          'total' => $total,
-          'mid_size' => 4,
-          'type' => 'list'
-     ));
-}
-*/
-
-/* Get included files // useful for debugging
-$included_files = get_included_files();
-
-foreach ($included_files as $filename) {
-    echo $filename . '<br>';
-}
-
-
-
-if (isset($variable)) {}
-if (function_exists('function_name')) {}
-if (class_exists('class_name')) {}
-*/
 ?>

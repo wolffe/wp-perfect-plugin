@@ -2,9 +2,9 @@
 Contributors: butterflymedia, getbutterfly
 Tags: utilities, developer, perfection, sitemap, seo
 License: GPLv3
-Requires at least: 3.3
-Tested up to: 3.6-beta4
-Stable tag: 0.1.7
+Requires at least: 4.0
+Tested up to: 4.1.1
+Stable tag: 0.1.9
 
 == Description ==
 
@@ -17,6 +17,14 @@ It also provides a simple SEO tracking function showing several SEO/SERP statist
 Upload and activate the plugin.
 
 == Changelog ==
+
+= 0.1.9 =
+* FEATURE: Merged WordPress Sweeper plugin
+* UPDATE: Removed obsolete SEO tracker module
+
+= 0.1.8 =
+* UPDATE: Removed obsolete analytics module
+* FIX: Removed old links
 
 = 0.1.7 =
 * Fixed Google Streetview (backend)
