@@ -39,7 +39,7 @@ load_plugin_textdomain('w3p', false, $plugin_dir . '/languages');
 add_option('w3p_email', '');
 
 function w3p_plugin_menu() {
-	add_menu_page('Perfect Plugin', 'Perfect Plugin', 'manage_options', 'w3p', 'w3p_plugin_main', W3P_PLUGIN_URL.'/images/icon-16.png');
+	add_menu_page('Perfect Plugin', 'Perfect Plugin', 'manage_options', 'w3p', 'w3p_plugin_main', 'dashicons-lightbulb');
 	add_submenu_page('w3p', 'W3P Webmaster', 'W3P Webmaster', 'manage_options', 'w3p-webmaster', 'all_in_one_webmaster_options_page');
 	add_submenu_page('w3p', 'W3P Options', 'W3P Options', 'manage_options', 'w3p-options', 'w3p_plugin_options');
 	add_submenu_page('w3p', 'W3P Media Sitemap', 'W3P Media Sitemap', 'manage_options', 'w3p-sitemap', 'multi_sitemap_generate');
@@ -65,7 +65,7 @@ function w3p_plugin_main() {
 		<h2>Perfect Plugin (W3P)</h2>
 		<div id="poststuff" class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h3>About Perfect Plugin (W3P) <small>(<a href="http://getbutterfly.com/" rel="external">official web site</a>)</small></h3>
+				<h3><span class="dashicons dashicons-lightbulb"></span> About Perfect Plugin (W3P)</h3>
 				<div class="inside">
 					<p><small>You are using Perfect Plugin version <strong><?php echo W3P_VERSION; ?></strong>.</small></p>
 					<p><img src="<?php echo W3P_PLUGIN_URL; ?>/images/icon-32.png" alt="" class="alignright">Perfect Plugin (W3P) aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.</p>
