@@ -1,0 +1,15 @@
+.nav-tab-small .nav-tab,
+h3 .nav-tab {
+    padding: 8px 12px;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.codor {
+    display: inline-block;
+    padding: 2px 4px;
+    font: 12px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    color: #0366d6;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+}

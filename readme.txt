@@ -1,22 +1,195 @@
-=== WordPress Perfect Plugin ===
-Contributors: butterflymedia, getbutterfly
-Tags: utilities, developer, perfection, sitemap, seo
-License: GPLv3
-Requires at least: 4.0
-Tested up to: 4.1.1
-Stable tag: 0.1.9
+=== WP Perfect Plugin ===
+Contributors: butterflymedia
+Tags: seo, search console, open graph, local, sem, serp, google, bing, yandex
+Requires at least: 4.6
+Requires PHP: 7.0
+Tested up to: 5.2.1
+Stable tag: 1.3.5.1
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+
+WP Perfect Plugin (W3P) provides the minimum SEO/SEM/local/marketing options for any site owner.
 
 == Description ==
 
-Perfect Plugin aims to provide the minimum options for any starter or advanced webmaster. Perfect Plugin has basic options for search engines, analytics, easy code insertion, a simple contact form, Google Maps and StreetView and many other useful functions and shortcodes.
+W3P has options for search engines, such as ownership verification, local business JSON-LD data, Open Graph, analytics, header and footer easy code insertion and optimised SEO defaults.
 
-It also provides a simple SEO tracking function showing several SEO/SERP statistics and ranks.
+W3P also features a subpages shortcode.
+
+For support, feature requests and bug reporting, please visit the [official website](https://getbutterfly.com/wordpress-plugins/ "getButterfly").
 
 == Installation ==
 
 Upload and activate the plugin.
 
+== Screenshots ==
+
+1. Search Engine Verification And Link Relationships
+2. Homepage Details
+3. Local Business Details
+4. Analytics and Tag Management
+5. Header/Footer Management
+6. Open Graph
+7. Miscellaneous
+9. Plugin Dashboard
+
 == Changelog ==
+
+= 1.3.5 =
+* UPDATE: Removed Google+ integration
+* UPDATE: Updated PHP requirements
+* UPDATE: Updated WordPress compatibility
+
+= 1.3.4 =
+* FIX: Removed unused shortcode parameter
+* UPDATE: Updated WordPress compatibility
+
+= 1.3.3 =
+* UPDATE: Updated string/variable sanitisation
+
+= 1.3.2 =
+* UPDATE: Updated plugin name to avoid confusion
+* FIX: Fixed readme.txt version
+
+= 1.3.1 =
+* UPDATE: Added Baidu verification tag
+* UPDATE: Updated Google Tag Manager loading priority
+* UPDATE: Removed Google Tag Manager (noscript)
+
+= 1.3.0 =
+* UPDATE: Updated WordPress compatibility
+* FIX: Added missing Google Analytics and Google Tag Manager tags
+* FIX: Added missing header and footer tags
+* FIX: Added missing content
+
+= 1.2.1 =
+* UPDATE: Updated WordPress compatibility
+* FIX: Removed unused files and functions
+* FIX: Removed deprecated links
+* FIX: Added missing styles (backend)
+
+= 1.2 =
+* FIX: Removed double variable declaration
+* FIX: Removed unused (inherited) variable declaration
+* UPDATE: Moved plugin to Settings area to unclutter menu
+* UPDATE: Removed unused welcome mat feature
+* UPDATE: UI tweaks
+* PERFORMANCE: Removed unused code, fixed line endings and added PSR code changes
+
+= 1.1.3 =
+* FEATURE: Added microdata breadcrumbs (unstyled)
+
+= 1.1.2 =
+* FIX: Google Tag Manager script position
+
+= 1.1.1 =
+* FIX: Fixed excerpt not being generated from the post/page content
+* FIX: Fixed settings page description
+
+= 1.1.0 =
+* FEATURE: Added welcome mat (scroll mat) feature
+* FIX: Fixed performance
+
+= 1.0.4 =
+* FIX: Unified gbad.css styles (.codor)
+* UPDATE: Removed Google Maps as it now requires a key and a developer account
+
+= 1.0.3 =
+* UI: UI and wording tweaks
+* UI: Added sharing debugger link for Open Graph/Facebook
+* FIX: Added OG schema to DOCTYPE only if Open Graph option is checked
+* FIX: Fixed excerpts for SEO description
+* FIX: Fixed DOCTYPE prefix for Open Graph
+* UPDATE: Added OG default image option
+* UPDATE: Added post image capture if no default image or post thumbnail is set
+* UPDATE: Added excerpts to pages
+
+= 1.0.2 =
+* FIX: Fixed an issue with description improperly escaping quotes
+* FIX: Removed version, path and URL constants
+* FIX: Removed globally set option
+* FIX: Code cleanup
+* UPDATE: UI tweaks and section links
+* UPDATE: readme.txt improvements
+* FEATURE: Added Majestic SEO verification
+
+= 1.0.1 =
+* UPDATE: Changed several option names to better reflect the plugin
+
+= 1.0.0 =
+* FIX: Removed unsafe built-in security module
+* FIX: Better plugin security
+* FIX: Removed unused /languages/ directory
+* FIX: Renamed some functions to avoid conflicts
+* FIX: Removed old Google Maps JS API
+* FIX: Added capability check for option saving
+* FIX: Removed deprecated contact form feature
+
+= 0.6.4 =
+* FIX: Removed tags from og:title content
+* FIX: Fixed old support link
+
+= 0.6.3 =
+* FIX: Fixed community translations for WordPress 4.6+
+* FIX: Fixed several label targets
+* UPDATE: Added screenshots
+
+= 0.6.2 =
+* FIX: Fixed wrong translatable string
+* FIX: Removed unused sitemap module
+
+= 0.6.1 =
+* FIX: Fixed local business contextual help
+* FIX: Fixed code standards
+* FIX: Fixed scripts and styles enqueue
+* UPDATE: Added more translatable strings
+
+= 0.6.0 =
+* UPDATE: Added proper i18n
+
+= 0.5.3 =
+* FIX: Added missing module
+
+= 0.5.2 =
+* UPDATE: Removed old files
+
+= 0.5.1 =
+* UPDATE: File cleanup and description update
+
+= 0.5.0 =
+* UI: UI/UX improvements
+* FEATURE: Removed Alexa verification as site claiming has been deprecated
+* FEATURE: Added Yandex verification
+* FEATURE: Added Pinterest verification
+* FEATURE: Added Web of Trust verification
+* FEATURE: Added Google+ link relationships (profile URL and page URL)
+* FEATURE: Added Twitter link relationship
+* FEATURE: Added Google Tag Manager
+* FEATURE: Added local business details
+* UPDATE: Removed several theme-specific and opinionated defaults
+* UPDATE: Removed dashboard widget
+
+= 0.4.0 =
+* FIX: Fixed dashboard beacon
+* UPDATE: Removed Compete analytics
+* UPDATE: Renamed and tweaked the UI and wording of the Webmaster section
+* UPDATE: Updated messages and notifications
+* UPDATE: Removed 404 redirection as WordPress does the job using canonical redirection
+* UPDATE: Removed Google Streetview as it was dependent to an API key
+* UPDATE: Removed Yahoo and Ask in SEO Love module
+* PERFORMANCE: Added autoloading to options
+
+= 0.3.0 =
+* UPDATE: Added getButterfly ad box
+
+= 0.2 =
+* UPDATE: Removed Sweeper plugin
+* UPDATE: Removed obsolete analytics module
+* UPDATE: Removed obsolete sitemap module
+* UPDATE: Removed obsolete admin.css
+* FIX: Fixed several links
+* FIX: Fixed Google Maps URL to automatically pick http:// or https://
+* FIX: Added language files
 
 = 0.1.9 =
 * FEATURE: Merged WordPress Sweeper plugin
@@ -116,3 +289,8 @@ Upload and activate the plugin.
 
 = 0.1.0 =
 * First release (buggy, crippled and alpha quality)
+
+## Upgrade Notice ##
+
+### 1.0.1 ###
+1.0 is a major update. You will need to recheck/reset your verification tags and use a different contact plugin when upgrading from 0.6.x to 1.x. The contact module has been retired due to several security issues.
