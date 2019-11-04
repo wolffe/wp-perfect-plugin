@@ -3,8 +3,8 @@ Contributors: butterflymedia
 Tags: seo, search console, open graph, local, sem, serp, google, bing, yandex
 Requires at least: 4.9
 Requires PHP: 7.0
-Tested up to: 5.2.1
-Stable tag: 1.3.6
+Tested up to: 5.2.4
+Stable tag: 1.3.7
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
