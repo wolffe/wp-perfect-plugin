@@ -38,12 +38,12 @@ function w3p_settings() { ?>
 
                         <h3><?php _e('Shortcodes', 'wp-perfect-plugin'); ?></h2>
                         <ul>
-                            <li><strong>List Subpages</strong> - Use the <code>[subpages]</code> shortcode to list the subpages of the current page as a <code>ul/li</code> list, allowing you to use parent pages in a similar way to categories. The <code>ul</code> structure is ready for styling using the <code>.w3p-subpages</code> CSS class.</li>
+                            <li><strong>List Subpages</strong> - Use the <code class="codor">[subpages]</code> shortcode to list the subpages of the current page as a <code class="codor">ul/li</code> list, allowing you to use parent pages in a similar way to categories. The <code class="codor">ul</code> structure is ready for styling using the <code class="codor">.w3p-subpages</code> CSS class.</li>
                         </ul>
 
                         <h3><?php _e('Functions', 'wp-perfect-plugin'); ?></h2>
                         <ul>
-                            <li><strong>Microdata breadcrumbs</strong> - Use the <code>&lt;php if (function_exists('w3p_breadcrumbs')) { w3p_breadcrumbs(); } ?&gt;</code> template function to display breadcrumbs. Note that they are displayed as an <code>ol/li</code> list, and are unstyled.</li>
+                            <li><strong>Microdata breadcrumbs</strong> - Use the <code class="codor">&lt;php if (function_exists('w3p_breadcrumbs')) { w3p_breadcrumbs(); } ?&gt;</code> template function to display breadcrumbs. Note that they are displayed as an <code class="codor">ol/li</code> list, and are unstyled.</li>
                         </ul>
                     </div>
                 </div>

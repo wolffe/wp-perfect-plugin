@@ -1,10 +1,10 @@
 === WP Perfect Plugin ===
 Contributors: butterflymedia
 Tags: seo, search console, open graph, local, sem, serp, google, bing, yandex
-Requires at least: 4.9
-Requires PHP: 7.0
+Requires at least: 5.0
+Requires PHP: 7.1
 Tested up to: 5.3
-Stable tag: 1.3.12
+Stable tag: 1.4.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -34,6 +34,11 @@ Upload and activate the plugin.
 9. Plugin Dashboard
 
 == Changelog ==
+
+= 1.4.0 =
+* UPDATE: Changed styling of code elements
+* UPDATE: Set up groundwork for improved breadcrumbs
+* UPDATE: Set up groundwork for improved page descriptions
 
 = 1.3.12 =
 * UPDATE: Updated WordPress compatibility
