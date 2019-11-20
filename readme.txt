@@ -3,8 +3,8 @@ Contributors: butterflymedia
 Tags: seo, search console, open graph, local, sem, serp, google, bing, yandex
 Requires at least: 4.9
 Requires PHP: 7.0
-Tested up to: 5.2.4
-Stable tag: 1.3.11
+Tested up to: 5.3
+Stable tag: 1.3.12
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -34,6 +34,10 @@ Upload and activate the plugin.
 9. Plugin Dashboard
 
 == Changelog ==
+
+= 1.3.12 =
+* UPDATE: Updated WordPress compatibility
+* UPDATE: Incremental testing GIT2SVN
 
 = 1.3.6 =
 * UPDATE: Updated help text for custom homepage description
