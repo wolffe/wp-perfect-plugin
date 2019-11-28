@@ -52,7 +52,8 @@ function w3p_settings() { ?>
         } else if ((string) $tab === 'settings') {
             if (isset($_POST['info_update1']) && current_user_can('manage_options')) {
                 update_option('w3p_module_seo', (int) sanitize_text_field($_POST['w3p_module_seo']));
-                update_option('w3p_module_mat', (int) sanitize_text_field($_POST['w3p_module_mat']));
+
+                delete_option('w3p_module_mat');
 
                 echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
             }
@@ -139,24 +140,6 @@ function w3p_settings() { ?>
                         @<input name="w3p_twitter_author" type="text" class="regular-text" value="<?php echo get_option('w3p_twitter_author'); ?>"> <label>Twitter Username</label>
                         <br><small>e.g. <span class="codor">getButterfly</span></small>
                     </p>
-
-                    <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>
-                </form>
-                <?php
-            } else if ((string) $subTab === 'homepage') {
-                if (isset($_POST['info_update1']) && current_user_can('manage_options')) {
-                    update_option('w3p_homepage_description', stripslashes_deep(sanitize_text_field($_POST['w3p_homepage_description'])));
-
-                    echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
-                }
-                ?>
-                <form method="post" action="">
-                    <h3>Homepage Details</h3>
-                    <p><span class="dashicons dashicons-editor-help"></span> This section allows you to set a custom description for your homepage.</p>
-                    <p>
-                        <textarea name="w3p_homepage_description" class="large-text" rows="6"><?php echo get_option('w3p_homepage_description'); ?></textarea>
-                    </p>
-                    <p>Meta descriptions can be any length, but Google generally truncates snippets to ~155–160 characters. It's best to keep meta descriptions long enough that they're sufficiently descriptive, so we recommend descriptions between 50–160 characters. Keep in mind that the "optimal" length will vary depending on the situation, and your primary goal should be to provide value and drive clicks.</p>
 
                     <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>
                 </form>
@@ -264,6 +247,9 @@ function w3p_settings() { ?>
                     update_option('w3p_fb_admin_id', (int) $_POST["w3p_fb_admin_id"]);
                     update_option('w3p_fb_app_id', (int) $_POST["w3p_fb_app_id"]);
 
+                    delete_option('w3p_homepage_description');
+                    delete_option('w3p_od');
+
                     echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
                 }
                 ?>
@@ -274,7 +260,8 @@ function w3p_settings() { ?>
                         <input name="w3p_og" id="w3p_og" type="checkbox" value="1" <?php if (get_option('w3p_og') == 1) echo 'checked'; ?>> <label for="w3p_og">Add Open Graph data</label>
                         <br><small>This option requires your Facebook Admin ID and Application ID.</small>
                     </p>
-                    <p><span class="dashicons dashicons-lightbulb"></span> Debug your Open Graph details by using <a href="https://developers.facebook.com/tools/debug/" rel="external" target="_blank">Facebook Sharing Debugger</a> tool.</p>
+                    <p><span class="dashicons dashicons-lightbulb"></span> Debug your Open Graph details by using the <a href="https://developers.facebook.com/tools/debug/" rel="external noopener">Facebook Sharing Debugger</a> tool or the <a href="https://www.linkedin.com/post-inspector/inspect/" rel="external noopener">LinkedIn Inspector</a>.</p>
+                    <p>Meta descriptions can be any length, but Google generally truncates snippets to ~155–160 characters. It's best to keep meta descriptions long enough that they're sufficiently descriptive, so we recommend descriptions between 50–160 characters. Keep in mind that the "optimal" length will vary depending on the situation, and your primary goal should be to provide value and drive clicks.</p>
 
                     <hr>
                     <p><span class="dashicons dashicons-editor-help"></span> This section allows you to specify Facebook details.</p>
@@ -286,24 +273,6 @@ function w3p_settings() { ?>
                     </p>
                     <p>
                         <input name="w3p_fb_default_image" id="w3p_fb_default_image" type="url" class="regular-text" value="<?php echo get_option('w3p_fb_default_image'); ?>" placeholder="https://"> <label for="w3p_fb_default_image">Default Open Graph image</label>
-                    </p>
-
-                    <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>
-                </form>
-                <?php
-            } else if ((string) $subTab === 'misc') {
-                if (isset($_POST['info_update1']) && current_user_can('manage_options')) {
-                    update_option('w3p_od', (int) $_POST['w3p_od']);
-
-                    echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
-                }
-                ?>
-                <form method="post" action="">
-                    <h3>Miscellaneous</h3>
-                    <p><span class="dashicons dashicons-editor-help"></span> This section allows you to set various SEO/SEM options.</p>
-                    <p>
-                        <input name="w3p_od" id="w3p_od" type="checkbox" value="1" <?php if (get_option('w3p_od') == 1) echo 'checked'; ?>> <label for="w3p_od">Enable optimised descriptions</label>
-                        <br><small>Automatically generate description content for posts, pages, categories, tags and homepage. Note that <b>pages now support excerpts</b>.</small>
                     </p>
 
                     <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>

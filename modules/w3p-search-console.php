@@ -163,44 +163,59 @@ function w3p_head_og() {
     if (empty($w3p_excerpt)) {
         $w3p_excerpt = substr(get_the_content(), 0, 300);
     }
-
-    // if still empty
-    if (empty($w3p_excerpt)) {
-        $w3p_excerpt = get_option('w3p_homepage_description');
+   if (is_category()) {
+        $w3p_excerpt = wp_strip_all_tags(category_description());
     }
 
+    $mt = '';
+    $og = '';
+    $fb = '';
+    $tw = '';
+
+    $mt .= '<meta name="description" content="' . $w3p_excerpt . '">';
+
+    if (is_front_page()) {
+        $og .= '<meta property="og:type" content="website">';
+    } else {
+        $og .= '<meta property="og:type" content="article">';
+    }
+
+    // 10
+    $og .= '<meta property="og:locale" content="' . get_locale() . '">
+    <meta property="og:url" content="' . get_permalink() . '">
+    <meta property="og:site_name" content="' . get_bloginfo('name') . '">
+    <meta property="og:title" content="' . strip_tags(get_the_title()) . '">
+    <meta property="og:description" content="' . $w3p_excerpt . '">';
+
     // Twitter
-    echo '<meta name="twitter:card" content="summary">
+    $tw .= '<meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@' . get_option('w3p_twitter_author') . '">
     <meta name="twitter:creator" content="@' . get_option('w3p_twitter_author') . '">
     <meta name="twitter:title" content="' . strip_tags(get_the_title()) . '">
     <meta name="twitter:description" content="' . $w3p_excerpt . '">';
 
     // Facebook
-    echo '<meta property="fb:admins" content="' . get_option('w3p_fb_admin_id') . '">
-    <meta property="fb:app_id" content="' . get_option('w3p_fb_app_id') . '">
-    <meta property="og:url" content="' . get_permalink() . '">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="' . strip_tags(get_the_title()) . '">
-    <meta property="og:description" content="' . $w3p_excerpt . '">';
+    $fb .= '<meta property="fb:admins" content="' . get_option('w3p_fb_admin_id') . '">
+    <meta property="fb:app_id" content="' . get_option('w3p_fb_app_id') . '">';
 
     if (!has_post_thumbnail($post->ID)) {
         if (!empty(get_option('w3p_fb_default_image'))) {
-            echo '<meta property="og:image" content="' . get_option('w3p_fb_default_image') . '">';
+            $og .= '<meta property="og:image" content="' . get_option('w3p_fb_default_image') . '">';
         } else {
-            echo '<meta property="og:image" content="' . w3p_first_image() . '">';
+            $og .= '<meta property="og:image" content="' . w3p_first_image() . '">';
         }
     } else {
         $thumbnail_src = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
-        echo '<meta property="og:image" content="' . esc_attr($thumbnail_src[0]) . '">';
-        echo '<meta property="og:image:width" content="' . $thumbnail_src[1] . '">';
-        echo '<meta property="og:image:height" content="' . $thumbnail_src[2] . '">';
 
-        echo '<meta name="twitter:image" content="' . esc_attr($thumbnail_src[0]) . '">';
+        $og .= '<meta property="og:image" content="' . esc_attr($thumbnail_src[0]) . '">
+        <meta property="og:image:secure_url" content="' . esc_attr($thumbnail_src[0]) . '">
+        <meta property="og:image:width" content="' . $thumbnail_src[1] . '">
+        <meta property="og:image:height" content="' . $thumbnail_src[2] . '">';
+
+        $tw .= '<meta name="twitter:image" content="' . esc_attr($thumbnail_src[0]) . '">';
     }
 
-    echo '<meta property="og:site_name" content="' . get_bloginfo('name') . '">';
-    echo '<meta property="og:locale" content="' . get_locale() . '">';
+    echo $mt . $og . $fb . $tw;
 }
 
 function w3p_add_excerpts_to_pages() {
@@ -219,33 +234,7 @@ function w3p_first_image() {
     return $first_img;
 }
 
-/**
- * Meta Description.
- *
- * Add meta description for posts, pages and categories.
- *
- * @return string
- */
-function w3p_seo_meta_description() {
-    if (is_front_page() || is_home()) {
-        $description = sanitize_text_field(get_option('w3p_homepage_description'));
-    } else if (is_single() || is_page()) {
-        if (have_posts()) : while(have_posts()) : the_post();
-            $description = wp_strip_all_tags(get_the_excerpt());
-        endwhile; endif;
-    } else if (is_category()) {
-        $description = wp_strip_all_tags(category_description());
-    }
 
-    $w3pDescription = '<meta name="description" content="' . $description . '">';
-
-    echo (string) $w3pDescription;
-}
-
-if ((int) get_option('w3p_od') === 1) {
-    add_action('init', 'w3p_add_excerpts_to_pages');
-    add_action('wp_head', 'w3p_seo_meta_description');
-}
 
 add_action('wp_head', 'w3p_search_console_head');
 add_action('wp_footer', 'w3p_search_console_footer');

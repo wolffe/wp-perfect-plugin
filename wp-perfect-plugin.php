@@ -5,7 +5,7 @@ Plugin URI: https://getbutterfly.com/
 Description: WP Perfect Plugin aims to provide advanced options for any web developer. WP Perfect Plugin has options for search engines, such as ownership verification, local business JSON-LD data, Open Graph, analytics, header and footer easy code insertion and optimised SEO defaults.
 Author: Ciprian Popescu
 Author URI: https://getbutterfly.com/
-Version: 1.4.0
+Version: 1.4.1
 Text Domain: wp-perfect-plugin
 
 WP Perfect Plugin
@@ -49,3 +49,5 @@ add_action('admin_enqueue_scripts', 'w3p_enqueue_scripts');
 function w3p_enqueue_scripts() {
     wp_enqueue_style('gbad', plugins_url('css/gbad.css', __FILE__));
 }
+
+add_action('init', 'w3p_add_excerpts_to_pages');
