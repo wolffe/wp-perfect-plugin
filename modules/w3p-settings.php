@@ -75,12 +75,10 @@ function w3p_settings() { ?>
 
             <h3 class="nav-tab-wrapper">
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=verification'); ?>" class="nav-tab <?php echo $subTab === 'verification' ? 'nav-tab-active' : ''; ?>"><?php _e('Verification and Relationships', 'wp-perfect-plugin'); ?></a>
-                <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=homepage'); ?>" class="nav-tab <?php echo $subTab === 'homepage' ? 'nav-tab-active' : ''; ?>"><?php _e('Homepage', 'wp-perfect-plugin'); ?></a>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=local'); ?>" class="nav-tab <?php echo $subTab === 'local' ? 'nav-tab-active' : ''; ?>"><?php _e('Local', 'wp-perfect-plugin'); ?></a>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=analytics'); ?>" class="nav-tab <?php echo $subTab === 'analytics' ? 'nav-tab-active' : ''; ?>"><?php _e('Analytics', 'wp-perfect-plugin'); ?></a>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=header_footer'); ?>" class="nav-tab <?php echo $subTab === 'header_footer' ? 'nav-tab-active' : ''; ?>"><?php _e('Header and Footer', 'wp-perfect-plugin'); ?></a>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=opengraph'); ?>" class="nav-tab <?php echo $subTab === 'opengraph' ? 'nav-tab-active' : ''; ?>"><?php _e('Open Graph', 'wp-perfect-plugin'); ?></a>
-                <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=misc'); ?>" class="nav-tab <?php echo $subTab === 'misc' ? 'nav-tab-active' : ''; ?>"><?php _e('Misc', 'wp-perfect-plugin'); ?></a>
             </h3>
 
             <?php
@@ -248,6 +246,7 @@ function w3p_settings() { ?>
                     update_option('w3p_fb_app_id', (int) $_POST["w3p_fb_app_id"]);
 
                     delete_option('w3p_homepage_description');
+                    delete_option('w3p_fb_admin_id');
                     delete_option('w3p_od');
 
                     echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
@@ -265,9 +264,6 @@ function w3p_settings() { ?>
 
                     <hr>
                     <p><span class="dashicons dashicons-editor-help"></span> This section allows you to specify Facebook details.</p>
-                    <p>
-                        <input name="w3p_fb_admin_id" type="text" class="regular-text" value="<?php echo get_option('w3p_fb_admin_id'); ?>"> <label>Facebook Admin ID</label>
-                    </p>
                     <p>
                         <input name="w3p_fb_app_id" type="text" class="regular-text" value="<?php echo get_option('w3p_fb_app_id'); ?>"> <label>Facebook Application ID</label>
                     </p>

@@ -195,8 +195,7 @@ function w3p_head_og() {
     <meta name="twitter:description" content="' . $w3p_excerpt . '">';
 
     // Facebook
-    $fb .= '<meta property="fb:admins" content="' . get_option('w3p_fb_admin_id') . '">
-    <meta property="fb:app_id" content="' . get_option('w3p_fb_app_id') . '">';
+    $fb .= '<meta property="fb:app_id" content="' . get_option('w3p_fb_app_id') . '">';
 
     if (!has_post_thumbnail($post->ID)) {
         if (!empty(get_option('w3p_fb_default_image'))) {
@@ -206,11 +205,13 @@ function w3p_head_og() {
         }
     } else {
         $thumbnail_src = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
+        $thumbnail_alt = get_post_meta(get_post_thumbnail_id($post->ID), '_wp_attachment_image_alt', true);
 
         $og .= '<meta property="og:image" content="' . esc_attr($thumbnail_src[0]) . '">
         <meta property="og:image:secure_url" content="' . esc_attr($thumbnail_src[0]) . '">
         <meta property="og:image:width" content="' . $thumbnail_src[1] . '">
-        <meta property="og:image:height" content="' . $thumbnail_src[2] . '">';
+        <meta property="og:image:height" content="' . $thumbnail_src[2] . '">
+        <meta property="og:image:alt" content="' . $thumbnail_alt . '">';
 
         $tw .= '<meta name="twitter:image" content="' . esc_attr($thumbnail_src[0]) . '">';
     }

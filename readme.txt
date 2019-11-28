@@ -4,7 +4,7 @@ Tags: seo, search console, open graph, local, sem, serp, google, bing, yandex
 Requires at least: 5.0
 Requires PHP: 7.1
 Tested up to: 5.3
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -34,6 +34,10 @@ Upload and activate the plugin.
 9. Plugin Dashboard
 
 == Changelog ==
+
+= 1.4.2 =
+* UPDATE: Removed Facebook admin ID from Open Graph tags
+* UPDATE: Added `og:image:alt` to Open Graph tags
 
 = 1.4.1 =
 * UPDATE: Added missing Open Graph tags
