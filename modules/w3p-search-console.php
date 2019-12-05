@@ -146,25 +146,33 @@ function w3p_opengraph_doctype($output) {
 }
 
 if ((int) get_option('w3p_og') === 1) {
-    add_action('wp_head', 'w3p_head_og', 5);
+    add_action('wp_head', 'w3p_head_og');
     add_filter('language_attributes', 'w3p_opengraph_doctype');
+}
+
+// Remove HTML comments
+function w3p_remove_html_comments($content = '') {
+	return preg_replace('/<!--(.|\s)*?-->/', '', $content);
 }
 
 // Add Open Graph meta info
 function w3p_head_og() {
     global $post;
 
-    if (!is_singular())
+    if (empty($post->ID)) {
         return;
-
-    $w3p_excerpt = get_the_excerpt();
-
-    // if no excerpt is set
-    if (empty($w3p_excerpt)) {
-        $w3p_excerpt = substr(get_the_content(), 0, 300);
     }
-   if (is_category()) {
-        $w3p_excerpt = wp_strip_all_tags(category_description());
+
+    $w3pExcerpt = get_the_excerpt($post->ID);
+
+    if (empty($w3pExcerpt)) {
+        $w3pExcerpt = w3p_remove_html_comments(get_the_content('', '', $post->ID));
+        $w3pExcerpt = strip_shortcodes($w3pExcerpt);
+        $w3pExcerpt = wp_strip_all_tags($w3pExcerpt);
+        $w3pExcerpt = substr($w3pExcerpt, 0, 300);
+    }
+    if (is_category()) {
+        $w3pExcerpt = wp_strip_all_tags(category_description());
     }
 
     $mt = '';
@@ -172,7 +180,7 @@ function w3p_head_og() {
     $fb = '';
     $tw = '';
 
-    $mt .= '<meta name="description" content="' . $w3p_excerpt . '">';
+    $mt .= '<meta name="description" content="' . $w3pExcerpt . '">';
 
     if (is_front_page()) {
         $og .= '<meta property="og:type" content="website">';
@@ -185,14 +193,14 @@ function w3p_head_og() {
     <meta property="og:url" content="' . get_permalink() . '">
     <meta property="og:site_name" content="' . get_bloginfo('name') . '">
     <meta property="og:title" content="' . strip_tags(get_the_title()) . '">
-    <meta property="og:description" content="' . $w3p_excerpt . '">';
+    <meta property="og:description" content="' . $w3pExcerpt . '">';
 
     // Twitter
     $tw .= '<meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@' . get_option('w3p_twitter_author') . '">
     <meta name="twitter:creator" content="@' . get_option('w3p_twitter_author') . '">
     <meta name="twitter:title" content="' . strip_tags(get_the_title()) . '">
-    <meta name="twitter:description" content="' . $w3p_excerpt . '">';
+    <meta name="twitter:description" content="' . $w3pExcerpt . '">';
 
     // Facebook
     $fb .= '<meta property="fb:app_id" content="' . get_option('w3p_fb_app_id') . '">';
@@ -200,8 +208,6 @@ function w3p_head_og() {
     if (!has_post_thumbnail($post->ID)) {
         if (!empty(get_option('w3p_fb_default_image'))) {
             $og .= '<meta property="og:image" content="' . get_option('w3p_fb_default_image') . '">';
-        } else {
-            $og .= '<meta property="og:image" content="' . w3p_first_image() . '">';
         }
     } else {
         $thumbnail_src = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
@@ -221,18 +227,6 @@ function w3p_head_og() {
 
 function w3p_add_excerpts_to_pages() {
     add_post_type_support('page', 'excerpt');
-}
-
-function w3p_first_image() {
-    global $post;
-
-    $first_img = '';
-    ob_start();
-    ob_end_clean();
-    $output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
-    $first_img = $matches[1][0];
-
-    return $first_img;
 }
 
 

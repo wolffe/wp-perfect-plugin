@@ -16,38 +16,23 @@ function w3p_settings() { ?>
         </h2>
 
         <?php if ((string) $tab === 'dashboard') { ?>
-            <div id="poststuff">
-                <div class="postbox">
-                    <h2><span class="dashicons dashicons-lightbulb"></span> <?php _e('About WP Perfect Plugin', 'wp-perfect-plugin'); ?></h2>
-                    <div class="inside">
-                        <p>WP Perfect Plugin aims to provide advanced options for any web developer.</p>
+            <h3><?php _e('About WP Perfect Plugin', 'wp-perfect-plugin'); ?></h3>
+            <p>WP Perfect Plugin aims to provide advanced options for any web developer.</p>
 
-                        <p>For support, feature requests and bug reporting, please visit the <a href="https://getbutterfly.com/" rel="external">official website</a>. If you enjoy this plugin, don't forget to rate it. Also, try our other WordPress plugins at <a href="https://getbutterfly.com/wordpress-plugins/" rel="external" target="_blank">getButterfly.com</a>.</p>
-                        <p>&copy;<?php echo date('Y'); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
-                    </div>
-                </div>
-            </div>
+            <p>For support, feature requests and bug reporting, please visit the <a href="https://getbutterfly.com/" rel="external">official website</a>. If you enjoy this plugin, don't forget to rate it.</p>
 
-            <div id="poststuff">
-                <div class="postbox">
-                    <div class="inside">
-                        <h3><?php _e('Modules', 'wp-perfect-plugin'); ?></h2>
-                        <ul>
-                            <li><a href="<?php echo admin_url('admin.php?page=w3p&tab=console'); ?>">Search Engine Console</a> - An almost complete solution for your search optimisation needs. Tracking codes, Open-Graph tags, local data and all the required SEO tweaks for your website.</li>
-                        </ul>
+            <h3><?php _e('Shortcodes', 'wp-perfect-plugin'); ?></h2>
+            <ul>
+                <li><strong>List Subpages</strong> - Use the <code class="codor">[subpages]</code> shortcode to list the subpages of the current page as a <code class="codor">ul/li</code> list, allowing you to use parent pages in a similar way to categories. The <code class="codor">ul</code> structure is ready for styling using the <code class="codor">.w3p-subpages</code> CSS class.</li>
+            </ul>
 
-                        <h3><?php _e('Shortcodes', 'wp-perfect-plugin'); ?></h2>
-                        <ul>
-                            <li><strong>List Subpages</strong> - Use the <code class="codor">[subpages]</code> shortcode to list the subpages of the current page as a <code class="codor">ul/li</code> list, allowing you to use parent pages in a similar way to categories. The <code class="codor">ul</code> structure is ready for styling using the <code class="codor">.w3p-subpages</code> CSS class.</li>
-                        </ul>
+            <h3><?php _e('Functions', 'wp-perfect-plugin'); ?></h2>
+            <ul>
+                <li><strong>Microdata breadcrumbs</strong> - Use the <code class="codor">&lt;php if (function_exists('w3p_breadcrumbs')) { w3p_breadcrumbs(); } ?&gt;</code> template function to display breadcrumbs. Note that they are displayed as an <code class="codor">ol/li</code> list, and are unstyled.</li>
+            </ul>
 
-                        <h3><?php _e('Functions', 'wp-perfect-plugin'); ?></h2>
-                        <ul>
-                            <li><strong>Microdata breadcrumbs</strong> - Use the <code class="codor">&lt;php if (function_exists('w3p_breadcrumbs')) { w3p_breadcrumbs(); } ?&gt;</code> template function to display breadcrumbs. Note that they are displayed as an <code class="codor">ol/li</code> list, and are unstyled.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <hr>
+            <p>&copy;<?php echo date('Y'); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
             <?php
         } else if ((string) $tab === 'settings') {
             if (isset($_POST['info_update1']) && current_user_can('manage_options')) {
