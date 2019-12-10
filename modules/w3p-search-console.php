@@ -164,6 +164,8 @@ function w3p_head_og() {
     }
 
     $w3pExcerpt = get_the_excerpt($post->ID);
+    $w3pExcerpt = strip_shortcodes($w3pExcerpt);
+    $w3pExcerpt = wp_strip_all_tags($w3pExcerpt);
 
     if (empty($w3pExcerpt)) {
         $w3pExcerpt = w3p_remove_html_comments(get_the_content('', '', $post->ID));
