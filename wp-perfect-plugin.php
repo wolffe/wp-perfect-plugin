@@ -5,7 +5,7 @@ Plugin URI: https://getbutterfly.com/
 Description: WP Perfect Plugin aims to provide advanced options for any web developer. WP Perfect Plugin has options for search engines, such as ownership verification, local business JSON-LD data, Open Graph, analytics, header and footer easy code insertion and optimised SEO defaults.
 Author: Ciprian Popescu
 Author URI: https://getbutterfly.com/
-Version: 1.4.4
+Version: 1.4.5
 Text Domain: wp-perfect-plugin
 
 WP Perfect Plugin
@@ -51,3 +51,53 @@ function w3p_enqueue_scripts() {
 }
 
 add_action('init', 'w3p_add_excerpts_to_pages');
+
+
+
+/**
+ * Generate sitemap.xml in document root
+ *
+ * @return void
+ */
+function w3p_create_sitemap() {
+    $w3pSitemapTypes = get_option('w3p_sitemap_types');
+
+    $postsForSitemap = get_posts([
+        'numberposts' => -1,
+        'orderby' => 'modified',
+        'post_type' => $w3pSitemapTypes,
+        'order' => 'DESC',
+        'post_status' => 'publish',
+        'suppress_filters' => true,
+        'ignore_sticky_posts' => true,
+        'no_found_rows' => true,
+        'cache_results' => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false
+    ]);
+
+    $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . "\n";
+
+    foreach ($postsForSitemap as $post) {
+        setup_postdata($post);
+
+        $postdate = explode(' ', $post->post_modified);
+
+        $sitemap .= "\t" . '<url>' . "\n" .
+                    "\t\t" . '<loc>' . get_permalink($post->ID) . '</loc>' . "\n" .
+                    "\t\t" . '<lastmod>' . $postdate[0] . '</lastmod>' . "\n" .
+                    "\t" . '</url>' . "\n";
+    }
+
+    $sitemap .= '</urlset>';
+
+    $fp = fopen(ABSPATH . 'sitemap.xml', 'w');
+
+    fwrite($fp, $sitemap);
+    fclose($fp);
+}
+
+add_action('publish_post', 'w3p_create_sitemap');
+add_action('publish_page', 'w3p_create_sitemap');
+add_action('save_post', 'w3p_create_sitemap');

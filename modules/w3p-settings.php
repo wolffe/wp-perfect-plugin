@@ -64,6 +64,7 @@ function w3p_settings() { ?>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=analytics'); ?>" class="nav-tab <?php echo $subTab === 'analytics' ? 'nav-tab-active' : ''; ?>"><?php _e('Analytics', 'wp-perfect-plugin'); ?></a>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=header_footer'); ?>" class="nav-tab <?php echo $subTab === 'header_footer' ? 'nav-tab-active' : ''; ?>"><?php _e('Header and Footer', 'wp-perfect-plugin'); ?></a>
                 <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=opengraph'); ?>" class="nav-tab <?php echo $subTab === 'opengraph' ? 'nav-tab-active' : ''; ?>"><?php _e('Open Graph', 'wp-perfect-plugin'); ?></a>
+                <a href="<?php echo admin_url('admin.php?page=w3p&tab=console&tab2=sitemap'); ?>" class="nav-tab <?php echo $subTab === 'sitemap' ? 'nav-tab-active' : ''; ?>"><?php _e('Sitemap', 'wp-perfect-plugin'); ?></a>
             </h3>
 
             <?php
@@ -259,18 +260,53 @@ function w3p_settings() { ?>
                     <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>
                 </form>
                 <?php
-            }
-        } else if ((string) $tab === '') {
-            if (isset($_POST['info_update1']) && current_user_can('manage_options')) {
-                echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
-            }
-            ?>
-            <form method="post" action="">
-                <h3><?php _e('More Settings', 'wp-perfect-plugin'); ?></h3>
+            } else if ((string) $subTab === 'sitemap') {
+                if (isset($_POST['info_update1']) && current_user_can('manage_options')) {
+                    if (isset($_POST['w3p_sitemap_types'])) {
+                        $w3pSitemapTypes = $_POST['w3p_sitemap_types'];
 
-                <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>
-            </form>
-            <?php
+                        update_option('w3p_sitemap_types', $w3pSitemapTypes);
+                    } else {
+                        update_option('w3p_sitemap_types', []);
+                    }
+
+                    w3p_create_sitemap();
+
+                    echo '<div class="updated notice is-dismissible"><p>Settings updated!</p></div>';
+                }
+                ?>
+                <form method="post" action="">
+                    <h3><?php _e('Sitemap', 'wp-perfect-plugin'); ?></h3>
+
+                    <p>Include the following post types in your <code>sitemap.xml</code> file:</p>
+                    <p>
+                        <?php
+                        $args = [
+                            'public' => true,
+                            '_builtin' => false
+                        ];
+
+                        $output = 'names'; // names or objects, note names is the default
+                        $operator = 'and'; // 'and' or 'or'
+
+                        $post_types = ['post', 'page'];
+                        $post_types = array_merge($post_types + get_post_types($args));
+
+                        foreach ($post_types as $post_type) {
+                            $checked = '';
+                            if (in_array($post_type, get_option('w3p_sitemap_types'))) {
+                                $checked = 'checked';
+                            }
+
+                            echo '<input type="checkbox" name="w3p_sitemap_types[]" value="' . $post_type . '" ' . $checked . '> <code>' . $post_type . '</code><br>';
+                        }
+                        ?>
+                    </p>
+
+                    <p><input type="submit" name="info_update1" class="button button-primary" value="<?php _e('Save Changes', 'wp-perfect-plugin'); ?>"></p>
+                </form>
+                <?php
+            }
         }
         ?>
 	</div>
